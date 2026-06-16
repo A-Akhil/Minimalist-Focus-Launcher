@@ -147,6 +147,7 @@ class MainActivity : ComponentActivity() {
     )
 
     private val permissionManagerVisible = MutableStateFlow(false)
+    private val allSetScreenVisible = MutableStateFlow(false)
 
     private val notificationRestrictionHint = MutableStateFlow(false)
     private var notificationAccessRequested = false
@@ -219,6 +220,7 @@ class MainActivity : ComponentActivity() {
                 val filterState by notificationFilterViewModel.uiState.collectAsStateWithLifecycle()
                 val permissions by permissionsState.collectAsStateWithLifecycle()
                 val manualPermissionManagerVisible by permissionManagerVisible.collectAsStateWithLifecycle()
+                val isAllSetScreenVisible by allSetScreenVisible.collectAsStateWithLifecycle()
                 val permissionsAcknowledged by settingsManager
                     .observePermissionOnboardingAcknowledged()
                     .collectAsStateWithLifecycle(initialPermissionsAcknowledged)
@@ -226,14 +228,8 @@ class MainActivity : ComponentActivity() {
                     .observeOnboardingComplete()
                     .collectAsStateWithLifecycle(initialOnboardingComplete)
                 val restrictedHint by notificationRestrictionHint.collectAsStateWithLifecycle()
-                val showPermissionScreen = manualPermissionManagerVisible || !permissions.requiredGranted || !permissionsAcknowledged
-
-                LaunchedEffect(showPermissionScreen) {
-                    // android.util.Log.d(
-                    //     "PermissionOverlay",
-                    //     "show=$showPermissionScreen manual=$manualPermissionManagerVisible required=${permissions.requiredGranted}"
-                    // )
-                }
+                
+                val showPermissionScreen = manualPermissionManagerVisible || (!permissionsAcknowledged && !isAllSetScreenVisible)
 
                 LaunchedEffect(permissions.requiredGranted) {
                     if (!permissions.requiredGranted) {
@@ -334,6 +330,15 @@ class MainActivity : ComponentActivity() {
                                 settingsManager.setOnboardingComplete(true)
                             }
                         },
+                    )
+                } else if (isAllSetScreenVisible) {
+                    com.minifocus.launcher.ui.AllSetScreen(
+                        onBegin = {
+                            lifecycleScope.launch {
+                                settingsManager.setPermissionOnboardingAcknowledged(true)
+                                allSetScreenVisible.value = false
+                            }
+                        }
                     )
                 } else if (!showPermissionScreen) {
                     LauncherApp(
@@ -446,9 +451,10 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onContinue = {
-                            lifecycleScope.launch {
-                                settingsManager.setPermissionOnboardingAcknowledged(true)
+                            if (permissionManagerVisible.value) {
                                 permissionManagerVisible.value = false
+                            } else {
+                                allSetScreenVisible.value = true
                             }
                         },
                         onRefreshPermissions = ::updatePermissionsState
