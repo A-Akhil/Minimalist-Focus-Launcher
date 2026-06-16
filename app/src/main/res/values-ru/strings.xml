@@ -263,7 +263,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Отзывы и Ошибки</string>
     <string name="about_feedback_hint">Для баг-репортов:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Или отправьте письмо на:</string>
     <string name="permissions_title">Требуются разрешения</string>
     <string name="permissions_subtitle">Нам нужно несколько разрешений для контроля.</string>

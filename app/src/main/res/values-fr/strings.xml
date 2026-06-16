@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Retours &amp; Problèmes</string>
     <string name="about_feedback_hint">Pour les rapports de bugs :</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Ou envoyez un email à :</string>
     <string name="permissions_title">Permissions requises</string>
     <string name="permissions_subtitle">Nous avons besoin de quelques permissions pour garder le contrôle.</string>

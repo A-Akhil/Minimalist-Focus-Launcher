@@ -97,7 +97,7 @@ A minimalist Android launcher designed to reduce digital noise and promote inten
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/A-Akhil/mini-launcher.git
+   git clone https://github.com/A-Akhil/Minimalist-Focus-Launcher.git
    cd mini-launcher
    ```
 

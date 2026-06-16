@@ -24,7 +24,7 @@ Participation in this project is governed by the [Code of Conduct](CODE_OF_CONDU
    - Gradle Wrapper (bundled)
 2. **Clone and open**
    ```bash
-   git clone https://github.com/A-Akhil/mini-launcher.git
+   git clone https://github.com/A-Akhil/Minimalist-Focus-Launcher.git
    cd mini-launcher
    ```
    Open the project in Android Studio and let it sync.
