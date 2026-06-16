@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">கருத்து &amp; சிக்கல்கள்</string>
     <string name="about_feedback_hint">பிழை அறிக்கைகளுக்கு:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">அல்லது எங்களுக்கு மின்னஞ்சல் அனுப்பவும்:</string>
     <string name="permissions_title">அனுமதிகள் தேவை</string>
     <string name="permissions_subtitle">கட்டுப்பாட்டில் இருக்க எங்களுக்குச் சில அனுமதிகள் தேவை.</string>
@@ -379,4 +379,19 @@
     <string name="label_yesterday">நேற்று</string>
     <string name="label_next_month">அடுத்த மாதம்</string>
     <string name="label_previous_month">முந்தைய மாதம்</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">ஒரு மினிமலிஸ்ட் லாஞ்சர்\nகுவிவான வாழ்க்கைக்காக</string>
+    <string name="onboarding_tap_to_begin">தொடங்க எங்கு வேண்டுமானாலும் தட்டவும்</string>
+    <string name="onboarding_skip">தவிர்</string>
+    <string name="onboarding_swipe_to_tasks">உங்கள் பணிகளைக் காண ஸ்வைப் செய்யவும்</string>
+    <string name="onboarding_swipe_to_calendar">உங்கள் நாள்காட்டிக்கு ஸ்வைப் செய்யவும்</string>
+    <string name="onboarding_swipe_back_home">முகப்புக்குத் திரும்ப ஸ்வைப் செய்யவும்</string>
+    <string name="onboarding_swipe_to_drawer">ஆப்ஸ்களைத் திறக்க ஸ்வைப் செய்யவும்</string>
+    <string name="onboarding_long_press_to_pin">எந்த ஆப்ஸையும் பொருத்த நீண்ட நேரம் அழுத்தவும்</string>
+    <string name="onboarding_tap_pin">\'முகப்பில் பொருத்து\' என்பதைத் தட்டவும்</string>
+    <string name="onboarding_complete_title">நீங்கள் தயார்</string>
+    <string name="onboarding_complete_subtitle">அடுத்ததாக சில அனுமதிகளை அமைப்போம்</string>
+    <string name="onboarding_continue">தொடரவும்</string>
+    <string name="onboarding_replay">அறிமுகத்தை மீண்டும் பார்</string>
 </resources>

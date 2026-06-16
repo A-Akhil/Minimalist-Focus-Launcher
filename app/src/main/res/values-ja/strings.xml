@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">フィードバックと不具合</string>
     <string name="about_feedback_hint">バグ報告はこちら:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">またはメールでお送りください:</string>
     <string name="permissions_title">必要な権限</string>
     <string name="permissions_subtitle">アプリを機能させるためにいくつかの権限が必要です。</string>
@@ -379,4 +379,19 @@
     <string name="label_yesterday">昨日</string>
     <string name="label_next_month">来月</string>
     <string name="label_previous_month">先月</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">ミニマリストランチャー\n集中した生活のために</string>
+    <string name="onboarding_tap_to_begin">どこかをタップして始めましょう</string>
+    <string name="onboarding_skip">スキップ</string>
+    <string name="onboarding_swipe_to_tasks">スワイプしてタスクを表示</string>
+    <string name="onboarding_swipe_to_calendar">スワイプしてカレンダーを表示</string>
+    <string name="onboarding_swipe_back_home">スワイプしてホームに戻る</string>
+    <string name="onboarding_swipe_to_drawer">スワイプしてアプリを開く</string>
+    <string name="onboarding_long_press_to_pin">アプリを長押ししてピン留め</string>
+    <string name="onboarding_tap_pin">\'ホームにピン留め\'をタップ</string>
+    <string name="onboarding_complete_title">準備完了</string>
+    <string name="onboarding_complete_subtitle">次にいくつかの権限を設定しましょう</string>
+    <string name="onboarding_continue">続ける</string>
+    <string name="onboarding_replay">紹介を再生</string>
 </resources>

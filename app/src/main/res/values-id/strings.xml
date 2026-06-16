@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Umpan Balik &amp; Masalah</string>
     <string name="about_feedback_hint">Untuk laporan bug:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Atau kirim email ke:</string>
     <string name="permissions_title">Izin diperlukan</string>
     <string name="permissions_subtitle">Kami perlu beberapa izin agar tetap terkendali.</string>
@@ -379,4 +379,19 @@
     <string name="label_yesterday">Kemarin</string>
     <string name="label_next_month">Bulan depan</string>
     <string name="label_previous_month">Bulan sebelumnya</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">Peluncur minimalis\nuntuk kehidupan yang fokus</string>
+    <string name="onboarding_tap_to_begin">Ketuk di mana saja untuk memulai</string>
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_swipe_to_tasks">Usap untuk melihat tugas Anda</string>
+    <string name="onboarding_swipe_to_calendar">Usap untuk kalender Anda</string>
+    <string name="onboarding_swipe_back_home">Usap kembali ke beranda</string>
+    <string name="onboarding_swipe_to_drawer">Usap untuk membuka aplikasi</string>
+    <string name="onboarding_long_press_to_pin">Tekan lama aplikasi untuk menyematkannya</string>
+    <string name="onboarding_tap_pin">Ketuk \'Sematkan ke Beranda\'</string>
+    <string name="onboarding_complete_title">Anda siap</string>
+    <string name="onboarding_complete_subtitle">Mari atur beberapa izin selanjutnya</string>
+    <string name="onboarding_continue">Lanjut</string>
+    <string name="onboarding_replay">Ulangi Pengenalan</string>
 </resources>

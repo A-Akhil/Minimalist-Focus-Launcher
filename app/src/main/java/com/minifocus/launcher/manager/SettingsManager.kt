@@ -57,6 +57,7 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
         val syncTasksWithDate = intPreferencesKey("sync_tasks_with_date")
         val syncDailyReminders = intPreferencesKey("sync_daily_reminders")
         val showTasksInCalendar = intPreferencesKey("show_tasks_in_calendar")
+        val onboardingComplete = intPreferencesKey("onboarding_complete")
     }
 
     fun observeTheme(): Flow<LauncherTheme> = dataStore.data.map { prefs ->
@@ -104,6 +105,10 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
 
     fun observeDoubleTapLockScreen(): Flow<Boolean> = dataStore.data.map { prefs ->
         prefs[Keys.doubleTapLockScreen]?.let { it == 1 } ?: false
+    }
+
+    fun observeOnboardingComplete(): Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.onboardingComplete]?.let { it == 1 } ?: false
     }
 
     fun observeNotificationRetentionDays(): Flow<Int> = dataStore.data.map { prefs ->
@@ -200,6 +205,17 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             prefs[Keys.doubleTapLockScreen] = if (enabled) 1 else 0
         }
+    }
+
+    suspend fun setOnboardingComplete(complete: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[Keys.onboardingComplete] = if (complete) 1 else 0
+        }
+    }
+
+    suspend fun getOnboardingComplete(): Boolean {
+        val prefs = dataStore.data.first()
+        return prefs[Keys.onboardingComplete]?.let { it == 1 } ?: false
     }
 
     fun observeSelectedCalendarId(): Flow<Long> = dataStore.data.map { prefs ->

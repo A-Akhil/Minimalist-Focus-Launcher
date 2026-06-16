@@ -298,7 +298,7 @@ https://play.google.com/store/apps/details?id=com.minifocus.launcher</string>
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Feedback &amp; Issues</string>
     <string name="about_feedback_hint">For bug reports and feature requests:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Or send an email to:</string>
 
     <!-- Permissions Screen -->
@@ -439,4 +439,19 @@ Respect your decision</string>
     <string name="label_yesterday">Yesterday</string>
     <string name="label_next_month">Next month</string>
     <string name="label_previous_month">Previous month</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">A minimalist launcher\nfor a focused life</string>
+    <string name="onboarding_tap_to_begin">Tap anywhere to begin</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_swipe_to_tasks">Swipe to see your tasks</string>
+    <string name="onboarding_swipe_to_calendar">Swipe for your calendar</string>
+    <string name="onboarding_swipe_back_home">Swipe back home</string>
+    <string name="onboarding_swipe_to_drawer">Swipe to open apps</string>
+    <string name="onboarding_long_press_to_pin">Long-press any app to pin it</string>
+    <string name="onboarding_tap_pin">Tap \'Pin to Home\'</string>
+    <string name="onboarding_complete_title">You\'re ready</string>
+    <string name="onboarding_complete_subtitle">Let\'s set up a few permissions next</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_replay">Replay Onboarding</string>
 </resources>

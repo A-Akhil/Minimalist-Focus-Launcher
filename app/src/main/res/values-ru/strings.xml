@@ -263,7 +263,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Отзывы и Ошибки</string>
     <string name="about_feedback_hint">Для баг-репортов:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Или отправьте письмо на:</string>
     <string name="permissions_title">Требуются разрешения</string>
     <string name="permissions_subtitle">Нам нужно несколько разрешений для контроля.</string>
@@ -387,4 +387,19 @@
     <string name="label_yesterday">Вчера</string>
     <string name="label_next_month">Следующий месяц</string>
     <string name="label_previous_month">Предыдущий месяц</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">Минималистичный лаунчер\nдля сфокусированной жизни</string>
+    <string name="onboarding_tap_to_begin">Нажмите в любом месте, чтобы начать</string>
+    <string name="onboarding_skip">Пропустить</string>
+    <string name="onboarding_swipe_to_tasks">Проведите, чтобы увидеть задачи</string>
+    <string name="onboarding_swipe_to_calendar">Проведите для календаря</string>
+    <string name="onboarding_swipe_back_home">Проведите, чтобы вернуться на главную</string>
+    <string name="onboarding_swipe_to_drawer">Проведите, чтобы открыть приложения</string>
+    <string name="onboarding_long_press_to_pin">Долго нажмите на приложение, чтобы закрепить</string>
+    <string name="onboarding_tap_pin">Нажмите \'Закрепить на главной\'</string>
+    <string name="onboarding_complete_title">Вы готовы</string>
+    <string name="onboarding_complete_subtitle">Давайте настроим несколько разрешений</string>
+    <string name="onboarding_continue">Продолжить</string>
+    <string name="onboarding_replay">Повторить знакомство</string>
 </resources>

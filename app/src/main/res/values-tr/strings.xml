@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">Geri Bildirim &amp; Sorunlar</string>
     <string name="about_feedback_hint">Hata raporları için:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Veya e-posta gönderin:</string>
     <string name="permissions_title">İzinler gerekli</string>
     <string name="permissions_subtitle">Kontrolü sağlamak için birkaç izne ihtiyacımız var.</string>
@@ -379,4 +379,19 @@
     <string name="label_yesterday">Dün</string>
     <string name="label_next_month">Gelecek ay</string>
     <string name="label_previous_month">Önceki ay</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">Minimalist bir başlatıcı\nodaklanmış bir yaşam için</string>
+    <string name="onboarding_tap_to_begin">Başlamak için herhangi bir yere dokunun</string>
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_swipe_to_tasks">Görevlerinizi görmek için kaydırın</string>
+    <string name="onboarding_swipe_to_calendar">Takviminiz için kaydırın</string>
+    <string name="onboarding_swipe_back_home">Ana sayfaya dönmek için kaydırın</string>
+    <string name="onboarding_swipe_to_drawer">Uygulamaları açmak için kaydırın</string>
+    <string name="onboarding_long_press_to_pin">Sabitlemek için bir uygulamaya uzun basın</string>
+    <string name="onboarding_tap_pin">\'Ana Ekrana Sabitle\' seçeneğine dokunun</string>
+    <string name="onboarding_complete_title">Hazırsınız</string>
+    <string name="onboarding_complete_subtitle">Şimdi birkaç izin ayarlayalım</string>
+    <string name="onboarding_continue">Devam Et</string>
+    <string name="onboarding_replay">Tanıtımı Tekrarla</string>
 </resources>

@@ -254,7 +254,7 @@ fun AboutScreen(
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 16.sp,
             modifier = Modifier.clickable {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/A-Akhil/mini-launcher"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/A-Akhil/Minimalist-Focus-Launcher"))
                 context.startActivity(intent)
             }
         )

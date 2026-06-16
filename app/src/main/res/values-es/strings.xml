@@ -296,4 +296,19 @@
     <string name="label_yesterday">Ayer</string>
     <string name="label_next_month">Mes siguiente</string>
     <string name="label_previous_month">Mes anterior</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">Un lanzador minimalista\npara una vida enfocada</string>
+    <string name="onboarding_tap_to_begin">Toca en cualquier lugar para comenzar</string>
+    <string name="onboarding_skip">Omitir</string>
+    <string name="onboarding_swipe_to_tasks">Desliza para ver tus tareas</string>
+    <string name="onboarding_swipe_to_calendar">Desliza para tu calendario</string>
+    <string name="onboarding_swipe_back_home">Desliza para volver al inicio</string>
+    <string name="onboarding_swipe_to_drawer">Desliza para abrir las apps</string>
+    <string name="onboarding_long_press_to_pin">Mantén pulsada una app para fijarla</string>
+    <string name="onboarding_tap_pin">Toca \'Fijar en inicio\'</string>
+    <string name="onboarding_complete_title">Ya estás listo</string>
+    <string name="onboarding_complete_subtitle">Configuremos algunos permisos a continuación</string>
+    <string name="onboarding_continue">Continuar</string>
+    <string name="onboarding_replay">Repetir introducción</string>
 </resources>

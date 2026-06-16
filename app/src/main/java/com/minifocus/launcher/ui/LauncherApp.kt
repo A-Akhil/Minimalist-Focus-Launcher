@@ -117,6 +117,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -248,10 +249,80 @@ fun LauncherApp(
     onSetPendingTimeIntention: (AppEntry?) -> Unit,
     onUpdateExpiryAction: (String, ExpiryAction) -> Unit,
     onThemeChange: (com.minifocus.launcher.model.LauncherTheme) -> Unit,
+    onResetOnboarding: () -> Unit = {},
+    isOnboarding: Boolean = false,
+    onOnboardingComplete: () -> Unit = {},
     onRootBack: () -> Unit = {},
     onConsumeMessage: () -> Unit = {}
 ) {
     val pagerState = rememberPagerState(initialPage = 2, pageCount = { 4 })
+
+    // -- Onboarding step state machine --
+    val onboardingStep = remember { mutableStateOf(OnboardingSteps.WELCOME) }
+    val onboardingPinDone = remember { mutableStateOf(false) }
+
+    // Reset onboarding step if screen turns off (ON_STOP)
+    val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+    if (isOnboarding) {
+        androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                if (event == androidx.lifecycle.Lifecycle.Event.ON_STOP) {
+                    onboardingStep.value = OnboardingSteps.WELCOME
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+    }
+
+    // Advance onboarding steps based on pager page changes
+    if (isOnboarding) {
+        LaunchedEffect(pagerState.settledPage, onboardingStep.value) {
+            when (onboardingStep.value) {
+                // WELCOME does not track pager, advanced via tap callback
+                OnboardingSteps.SWIPE_TO_TASKS -> {
+                    if (pagerState.settledPage == 1) {
+                        onboardingStep.value = OnboardingSteps.SWIPE_TO_CALENDAR
+                    }
+                }
+                OnboardingSteps.SWIPE_TO_CALENDAR -> {
+                    if (pagerState.settledPage == 0) {
+                        onboardingStep.value = OnboardingSteps.SWIPE_BACK_HOME
+                    }
+                }
+                OnboardingSteps.SWIPE_BACK_HOME -> {
+                    if (pagerState.settledPage == 2) {
+                        onboardingStep.value = OnboardingSteps.SWIPE_TO_DRAWER
+                    }
+                }
+                OnboardingSteps.SWIPE_TO_DRAWER -> {
+                    if (pagerState.settledPage == 3) {
+                        onboardingStep.value = OnboardingSteps.LONG_PRESS_TO_PIN
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    // Intercept Android back button during onboarding
+    if (isOnboarding) {
+        BackHandler {
+            when (onboardingStep.value) {
+                OnboardingSteps.WELCOME -> onOnboardingComplete()
+                OnboardingSteps.SWIPE_TO_TASKS -> onboardingStep.value = OnboardingSteps.WELCOME
+                OnboardingSteps.SWIPE_TO_CALENDAR -> onboardingStep.value = OnboardingSteps.SWIPE_TO_TASKS
+                OnboardingSteps.SWIPE_BACK_HOME -> onboardingStep.value = OnboardingSteps.SWIPE_TO_CALENDAR
+                OnboardingSteps.SWIPE_TO_DRAWER -> onboardingStep.value = OnboardingSteps.SWIPE_BACK_HOME
+                OnboardingSteps.LONG_PRESS_TO_PIN -> onboardingStep.value = OnboardingSteps.SWIPE_TO_DRAWER
+                OnboardingSteps.TAP_PIN -> onboardingStep.value = OnboardingSteps.LONG_PRESS_TO_PIN
+                OnboardingSteps.COMPLETE -> onboardingStep.value = OnboardingSteps.TAP_PIN
+            }
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
     val bottomIconPickerSlot = remember { mutableStateOf<BottomIconSlot?>(null) }
     val searchVisible = state.isSearchVisible
@@ -603,6 +674,7 @@ fun LauncherApp(
                         onOpenLanguageSettings = { onLanguageSettingsVisibilityChange(true) },
                         selectedCalendarAccountName = state.selectedCalendarAccountName,
                         trackedReminderAppsCount = state.trackedReminderApps.size,
+                        onResetOnboarding = onResetOnboarding,
                         onBack = { onSettingsVisibilityChange(false) }
                     )
                 }
@@ -753,7 +825,37 @@ fun LauncherApp(
                     )
                 }
                 else -> {
-                    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                    val currentOnboardingStep = onboardingStep.value
+                    
+                    val nestedScrollConnection = remember(isOnboarding, currentOnboardingStep) {
+                        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+                            override fun onPreScroll(available: androidx.compose.ui.geometry.Offset, source: androidx.compose.ui.input.nestedscroll.NestedScrollSource): androidx.compose.ui.geometry.Offset {
+                                if (!isOnboarding) return androidx.compose.ui.geometry.Offset.Zero
+                                
+                                val sourceStr = source.toString()
+                                if (sourceStr != "Drag" && sourceStr != "UserInput") {
+                                    return androidx.compose.ui.geometry.Offset.Zero
+                                }
+                                
+                                val isSwipingRight = available.x > 0
+                                val isSwipingLeft = available.x < 0
+                                
+                                val canSwipeRight = currentOnboardingStep == OnboardingSteps.SWIPE_TO_TASKS || currentOnboardingStep == OnboardingSteps.SWIPE_TO_CALENDAR
+                                val canSwipeLeft = currentOnboardingStep == OnboardingSteps.SWIPE_BACK_HOME || currentOnboardingStep == OnboardingSteps.SWIPE_TO_DRAWER
+                                
+                                if (isSwipingRight && !canSwipeRight) {
+                                    return available // consume
+                                }
+                                if (isSwipingLeft && !canSwipeLeft) {
+                                    return available // consume
+                                }
+                                return androidx.compose.ui.geometry.Offset.Zero
+                            }
+                        }
+                    }
+
+                    Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
+                        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (page) {
                             0 -> CalendarScreen(selectedCalendarId = state.selectedCalendarId)
                             1 -> TasksScreen(
@@ -774,15 +876,17 @@ fun LauncherApp(
                             2 -> HomeScreen(
                                 state = state,
                                 onLaunchApp = { entry ->
-                                    onRecordAppUsage(entry.packageName, AppUsageEventSource.HOME)
-                                    handleAppLaunch(
-                                        entry,
-                                        coroutineScope,
-                                        onLaunchApp,
-                                        navigateToHome = { /* Already on home */ },
-                                        trackedPackages = trackedPackages,
-                                        onSetPendingTimeIntention = onSetPendingTimeIntention
-                                    )
+                                    if (!isOnboarding) {
+                                        onRecordAppUsage(entry.packageName, AppUsageEventSource.HOME)
+                                        handleAppLaunch(
+                                            entry,
+                                            coroutineScope,
+                                            onLaunchApp,
+                                            navigateToHome = { /* Already on home */ },
+                                            trackedPackages = trackedPackages,
+                                            onSetPendingTimeIntention = onSetPendingTimeIntention
+                                        )
+                                    }
                                 },
                                 bottomIconPickerSlot = bottomIconPickerSlot,
                                 onUnpinApp = onUnpinApp,
@@ -799,41 +903,71 @@ fun LauncherApp(
                             3 -> AllAppsScreen(
                                 apps = state.allApps,
                                 isDrawerVisible = pagerState.currentPage == 3,
-                                keyboardOnSwipe = shouldShowInlineSearch,
+                                keyboardOnSwipe = if (isOnboarding) false else shouldShowInlineSearch,
                                 searchQuery = state.searchQuery,
-                                shouldFocusSearch = shouldFocusInlineSearch,
+                                shouldFocusSearch = if (isOnboarding) false else shouldFocusInlineSearch,
                                 unreadCount = notificationInboxState.unreadCount,
                                 smartSuggestionsEnabled = state.smartSuggestionsEnabled,
                                 smartSuggestions = state.smartSuggestions,
                                 usageWeights = state.smartSuggestionWeights,
                                 onQueryChange = onSearchQueryChange,
                                 onAppSelected = { entry, source, _ ->
-                                    onRecordAppUsage(entry.packageName, source)
-                                    handleAppLaunch(
-                                        entry,
-                                        coroutineScope,
-                                        onLaunchApp,
-                                        navigateToHome = {
-                                            coroutineScope.launch {
-                                                pagerState.scrollToPage(2)
-                                            }
-                                        },
-                                        trackedPackages = trackedPackages,
-                                        onSetPendingTimeIntention = onSetPendingTimeIntention
-                                    )
+                                    if (!isOnboarding) {
+                                        onRecordAppUsage(entry.packageName, source)
+                                        handleAppLaunch(
+                                            entry,
+                                            coroutineScope,
+                                            onLaunchApp,
+                                            navigateToHome = {
+                                                coroutineScope.launch {
+                                                    pagerState.scrollToPage(2)
+                                                }
+                                            },
+                                            trackedPackages = trackedPackages,
+                                            onSetPendingTimeIntention = onSetPendingTimeIntention
+                                        )
+                                    }
                                 },
-                                onPinApp = onPinApp,
+                                onPinApp = { pkg ->
+                                    onPinApp(pkg)
+                                    if (isOnboarding) {
+                                        onboardingPinDone.value = true
+                                        onboardingStep.value = OnboardingSteps.COMPLETE
+                                    }
+                                },
                                 onUnpinApp = onUnpinApp,
                                 onHideApp = onHideApp,
                                 onLockApp = onLockApp,
-                                onOpenNotificationInbox = { openInbox(InboxBackTarget.None) },
-                                onOpenSettings = { onSettingsVisibilityChange(true) },
+                                onOpenNotificationInbox = { if (!isOnboarding) openInbox(InboxBackTarget.None) },
+                                onOpenSettings = { if (!isOnboarding) onSettingsVisibilityChange(true) },
                                 trackedPackages = trackedPackages,
                                 onAddTrackedReminderApp = onAddTrackedReminderApp,
-                                onRemoveTrackedReminderApp = onRemoveTrackedReminderApp
+                                onRemoveTrackedReminderApp = onRemoveTrackedReminderApp,
+                                onboardingPinOnly = isOnboarding && onboardingStep.value in listOf(
+                                    OnboardingSteps.LONG_PRESS_TO_PIN,
+                                    OnboardingSteps.TAP_PIN
+                                ),
+                                onOnboardingContextMenuShown = {
+                                    if (isOnboarding && onboardingStep.value == OnboardingSteps.LONG_PRESS_TO_PIN) {
+                                        onboardingStep.value = OnboardingSteps.TAP_PIN
+                                    }
+                                }
                             )
                         }
                     }
+
+                    // Onboarding overlay on top of the pager
+                    if (isOnboarding) {
+                        OnboardingOverlay(
+                            step = onboardingStep.value,
+                            onFinish = onOnboardingComplete,
+                            onWelcomeDismiss = {
+                                onboardingStep.value = OnboardingSteps.SWIPE_TO_TASKS
+                            },
+                            onSkip = onOnboardingComplete
+                        )
+                    }
+                    } // end Box
                 }
             }
 
@@ -1792,7 +1926,9 @@ private fun AllAppsScreen(
     onOpenSettings: () -> Unit,
     trackedPackages: Set<String>,
     onAddTrackedReminderApp: (String, String) -> Unit,
-    onRemoveTrackedReminderApp: (String) -> Unit
+    onRemoveTrackedReminderApp: (String) -> Unit,
+    onboardingPinOnly: Boolean = false,
+    onOnboardingContextMenuShown: () -> Unit = {}
 ) {
     val expandedApp = remember { mutableStateOf<String?>(null) }
     val lockDialogApp = remember { mutableStateOf<AppEntry?>(null) }
@@ -2171,18 +2307,25 @@ private fun AllAppsScreen(
     // Context menu for regular apps
     expandedApp.value?.let { pkgName ->
         filteredApps.find { it.packageName == pkgName }?.let { app ->
+            // Notify parent that context menu is shown during onboarding
+            if (onboardingPinOnly) {
+                LaunchedEffect(pkgName) {
+                    onOnboardingContextMenuShown()
+                }
+            }
+
             val isTracked = pkgName in trackedPackages
             AppContextMenu(
                 app = app,
                 onDismiss = { expandedApp.value = null },
                 onPin = if (!app.isPinned) ({ onPinApp(app.packageName) }) else null,
-                onUnpin = if (app.isPinned) ({ onUnpinApp(app.packageName) }) else null,
-                onHide = { onHideApp(app.packageName) },
-                onLock = { lockDialogApp.value = app },
-                onAddTimeReminder = if (!isTracked) ({
+                onUnpin = if (!onboardingPinOnly && app.isPinned) ({ onUnpinApp(app.packageName) }) else null,
+                onHide = if (!onboardingPinOnly) ({ onHideApp(app.packageName) }) else null,
+                onLock = if (!onboardingPinOnly) ({ lockDialogApp.value = app }) else null,
+                onAddTimeReminder = if (!onboardingPinOnly && !isTracked) ({
                     onAddTrackedReminderApp(app.packageName, app.label)
                 }) else null,
-                onRemoveTimeReminder = if (isTracked) ({
+                onRemoveTimeReminder = if (!onboardingPinOnly && isTracked) ({
                     onRemoveTrackedReminderApp(app.packageName)
                 }) else null
             )
@@ -2460,6 +2603,7 @@ private fun SettingsScreen(
     onOpenLanguageSettings: () -> Unit,
     selectedCalendarAccountName: String,
     trackedReminderAppsCount: Int,
+    onResetOnboarding: () -> Unit = {},
     onBack: () -> Unit
 ) {
     val homeSummary = buildString {
@@ -2652,6 +2796,15 @@ private fun SettingsScreen(
             title = stringResource(R.string.settings_about),
             subtitle = stringResource(R.string.settings_about_subtitle),
             onClick = onOpenAbout
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Dev/debug: replay onboarding
+        SettingsRow(
+            title = stringResource(R.string.onboarding_replay),
+            subtitle = null,
+            onClick = onResetOnboarding
         )
     }
 }

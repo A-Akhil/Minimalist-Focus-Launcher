@@ -255,7 +255,7 @@
     <string name="about_contact_website">devakhil.com</string>
     <string name="about_feedback_section">फ़ीडबैक और समस्याएं</string>
     <string name="about_feedback_hint">बग रिपोर्ट के लिए:</string>
-    <string name="about_feedback_repo">github.com/A-Akhil/mini-launcher</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">या हमें ईमेल करें:</string>
     <string name="permissions_title">अनुमतियां आवश्यक हैं</string>
     <string name="permissions_subtitle">नियंत्रण में रखने के लिए हमें कुछ अनुमतियों की आवश्यकता है।</string>
@@ -379,4 +379,19 @@
     <string name="label_yesterday">कल</string>
     <string name="label_next_month">अगला महीना</string>
     <string name="label_previous_month">पिछला महीना</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">एक मिनिमलिस्ट लॉन्चर\nएक केंद्रित जीवन के लिए</string>
+    <string name="onboarding_tap_to_begin">शुरू करने के लिए कहीं भी टैप करें</string>
+    <string name="onboarding_skip">छोड़ें</string>
+    <string name="onboarding_swipe_to_tasks">अपने कार्य देखने के लिए स्वाइप करें</string>
+    <string name="onboarding_swipe_to_calendar">अपने कैलेंडर के लिए स्वाइप करें</string>
+    <string name="onboarding_swipe_back_home">होम पर वापस स्वाइप करें</string>
+    <string name="onboarding_swipe_to_drawer">ऐप्स खोलने के लिए स्वाइप करें</string>
+    <string name="onboarding_long_press_to_pin">किसी भी ऐप को पिन करने के लिए देर तक दबाएं</string>
+    <string name="onboarding_tap_pin">\'होम पर पिन करें\' पर टैप करें</string>
+    <string name="onboarding_complete_title">आप तैयार हैं</string>
+    <string name="onboarding_complete_subtitle">आइए अब कुछ अनुमतियां सेट करें</string>
+    <string name="onboarding_continue">जारी रखें</string>
+    <string name="onboarding_replay">परिचय दोहराएं</string>
 </resources>
