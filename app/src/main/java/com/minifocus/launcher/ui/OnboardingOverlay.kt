@@ -46,6 +46,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.Adjust
+import androidx.compose.material.icons.outlined.Eco
+import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -134,10 +137,10 @@ fun OnboardingOverlay(
     Box(modifier = Modifier.fillMaxSize()) {
         // Scrim layer
         val scrimAlpha = when (step) {
-            OnboardingSteps.WELCOME -> OnboardingAnim.SCRIM_ALPHA_WELCOME
-            OnboardingSteps.COMPLETE -> OnboardingAnim.SCRIM_ALPHA_COMPLETE
+            OnboardingSteps.WELCOME,
             OnboardingSteps.LONG_PRESS_TO_PIN,
             OnboardingSteps.TAP_PIN -> 0f
+            OnboardingSteps.COMPLETE -> OnboardingAnim.SCRIM_ALPHA_COMPLETE
             else -> OnboardingAnim.SCRIM_ALPHA_SWIPE
         }
 
@@ -147,10 +150,6 @@ fun OnboardingOverlay(
                 .background(Color.Black.copy(alpha = scrimAlpha))
                 .then(
                     when (step) {
-                        OnboardingSteps.WELCOME -> Modifier.clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) { onWelcomeDismiss() }
                         OnboardingSteps.COMPLETE -> Modifier.pointerInput(Unit) {
                             awaitEachGesture { awaitFirstDown(requireUnconsumed = false) }
                         }
@@ -162,7 +161,7 @@ fun OnboardingOverlay(
         // Step-specific content
         when (step) {
             OnboardingSteps.WELCOME ->
-                WelcomeScreen(onSkip = onSkip)
+                WelcomeScreen(onStart = onWelcomeDismiss, onSkip = onSkip)
 
             OnboardingSteps.SWIPE_TO_TASKS ->
                 SwipeGuide(
@@ -217,58 +216,187 @@ fun OnboardingOverlay(
 // ---- Welcome screen ----
 
 @Composable
-private fun WelcomeScreen(onSkip: () -> Unit) {
+private fun WelcomeScreen(onStart: () -> Unit, onSkip: () -> Unit) {
+    val bgColor = androidx.compose.material3.MaterialTheme.colorScheme.background
+    val onBgColor = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(bgColor)
             .semantics {
-                contentDescription = "Welcome to MiniFocus. Tap anywhere to start the tour."
+                contentDescription = "Welcome to MiniFocus. Tap Get Started to begin."
             }
     ) {
+        // Draw the subtle landscape mountains
+        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+            val h = size.height
+            val w = size.width
+            val path1 = androidx.compose.ui.graphics.Path().apply {
+                moveTo(0f, h * 0.35f)
+                lineTo(w * 0.4f, h * 0.28f)
+                lineTo(w * 0.7f, h * 0.32f)
+                lineTo(w, h * 0.25f)
+                lineTo(w, h)
+                lineTo(0f, h)
+                close()
+            }
+            val path2 = androidx.compose.ui.graphics.Path().apply {
+                moveTo(0f, h * 0.45f)
+                lineTo(w * 0.3f, h * 0.38f)
+                lineTo(w * 0.8f, h * 0.45f)
+                lineTo(w, h * 0.38f)
+                lineTo(w, h)
+                lineTo(0f, h)
+                close()
+            }
+            drawPath(path1, color = onBgColor.copy(alpha = 0.03f))
+            drawPath(path2, color = onBgColor.copy(alpha = 0.02f))
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 48.dp)
+                .fillMaxSize()
+                .padding(horizontal = 32.dp, vertical = 48.dp)
         ) {
+            Spacer(modifier = Modifier.weight(0.5f))
+
+            // Real App Icon / Logo without clipping circle
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "MiniFocus Logo",
+                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(onBgColor),
+                modifier = Modifier.size(96.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
-                text = stringResource(R.string.app_name),
-                color = Color.White,
-                fontSize = 38.sp,
+                text = "Welcome",
+                color = onBgColor,
+                fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.5).sp,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = stringResource(R.string.onboarding_welcome_subtitle),
-                color = Color.White.copy(alpha = 0.6f),
-                fontSize = 16.sp,
+                text = "to " + stringResource(R.string.app_name),
+                color = onBgColor,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 24.sp
+                fontWeight = FontWeight.Medium
             )
 
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            val infiniteTransition = rememberInfiniteTransition(label = "tap")
-            val tapAlpha by infiniteTransition.animateFloat(
-                initialValue = 0.4f,
-                targetValue = 0.9f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(OnboardingAnim.PULSE_DURATION_MS),
-                    repeatMode = RepeatMode.Reverse
+            // Subtle divider line
+            Box(
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(2.dp)
+                    .background(onBgColor.copy(alpha = 0.5f), RoundedCornerShape(1.dp))
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            // Feature rows
+            Column(
+                verticalArrangement = Arrangement.spacedBy(28.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                FeatureRow(
+                    icon = Icons.Outlined.Eco,
+                    title = "Minimal by design",
+                    subtitle = "Everything you need,\nnothing you don't."
+                )
+                FeatureRow(
+                    icon = Icons.Outlined.Adjust,
+                    title = "Stay focused",
+                    subtitle = "Reduce distractions and\nget more done."
+                )
+                FeatureRow(
+                    icon = Icons.Outlined.Shield,
+                    title = "Privacy first",
+                    subtitle = "Your data stays on\nyour device."
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = onStart,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = onBgColor,
+                    contentColor = bgColor
                 ),
-                label = "tapAlpha"
-            )
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text(
+                    text = "Get Started",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
 
+            Spacer(modifier = Modifier.height(32.dp))
+
+            StepDots(currentStep = OnboardingSteps.WELCOME)
+        }
+    }
+}
+
+@Composable
+private fun FeatureRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    subtitle: String
+) {
+    val onBgColor = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .size(52.dp)
+                .background(onBgColor.copy(alpha = 0.05f), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = onBgColor,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        Column {
             Text(
-                text = stringResource(R.string.onboarding_tap_to_begin),
-                color = Color.White.copy(alpha = tapAlpha),
+                text = title,
+                color = onBgColor,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = subtitle,
+                color = onBgColor.copy(alpha = 0.7f),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Center
+                lineHeight = 20.sp
             )
         }
     }
