@@ -117,6 +117,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -278,29 +279,30 @@ fun LauncherApp(
 
     // Advance onboarding steps based on pager page changes
     if (isOnboarding) {
-        LaunchedEffect(pagerState.currentPage, onboardingStep.value) {
+        LaunchedEffect(pagerState.settledPage, onboardingStep.value) {
             when (onboardingStep.value) {
                 // WELCOME does not track pager, advanced via tap callback
                 OnboardingSteps.SWIPE_TO_TASKS -> {
-                    if (pagerState.currentPage == 1) {
+                    if (pagerState.settledPage == 1) {
                         onboardingStep.value = OnboardingSteps.SWIPE_TO_CALENDAR
                     }
                 }
                 OnboardingSteps.SWIPE_TO_CALENDAR -> {
-                    if (pagerState.currentPage == 0) {
+                    if (pagerState.settledPage == 0) {
                         onboardingStep.value = OnboardingSteps.SWIPE_BACK_HOME
                     }
                 }
                 OnboardingSteps.SWIPE_BACK_HOME -> {
-                    if (pagerState.currentPage == 2) {
+                    if (pagerState.settledPage == 2) {
                         onboardingStep.value = OnboardingSteps.SWIPE_TO_DRAWER
                     }
                 }
                 OnboardingSteps.SWIPE_TO_DRAWER -> {
-                    if (pagerState.currentPage == 3) {
+                    if (pagerState.settledPage == 3) {
                         onboardingStep.value = OnboardingSteps.LONG_PRESS_TO_PIN
                     }
                 }
+                else -> {}
             }
         }
     }
@@ -823,8 +825,37 @@ fun LauncherApp(
                     )
                 }
                 else -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                    val currentOnboardingStep = onboardingStep.value
+                    
+                    val nestedScrollConnection = remember(isOnboarding, currentOnboardingStep) {
+                        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+                            override fun onPreScroll(available: androidx.compose.ui.geometry.Offset, source: androidx.compose.ui.input.nestedscroll.NestedScrollSource): androidx.compose.ui.geometry.Offset {
+                                if (!isOnboarding) return androidx.compose.ui.geometry.Offset.Zero
+                                
+                                val sourceStr = source.toString()
+                                if (sourceStr != "Drag" && sourceStr != "UserInput") {
+                                    return androidx.compose.ui.geometry.Offset.Zero
+                                }
+                                
+                                val isSwipingRight = available.x > 0
+                                val isSwipingLeft = available.x < 0
+                                
+                                val canSwipeRight = currentOnboardingStep == OnboardingSteps.SWIPE_TO_TASKS || currentOnboardingStep == OnboardingSteps.SWIPE_TO_CALENDAR
+                                val canSwipeLeft = currentOnboardingStep == OnboardingSteps.SWIPE_BACK_HOME || currentOnboardingStep == OnboardingSteps.SWIPE_TO_DRAWER
+                                
+                                if (isSwipingRight && !canSwipeRight) {
+                                    return available // consume
+                                }
+                                if (isSwipingLeft && !canSwipeLeft) {
+                                    return available // consume
+                                }
+                                return androidx.compose.ui.geometry.Offset.Zero
+                            }
+                        }
+                    }
+
+                    Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
+                        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (page) {
                             0 -> CalendarScreen(selectedCalendarId = state.selectedCalendarId)
                             1 -> TasksScreen(

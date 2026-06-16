@@ -46,6 +46,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Adjust
 import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.material.icons.outlined.Shield
@@ -472,16 +473,21 @@ private fun SwipeGuide(
                     .height(80.dp),
                 contentAlignment = Alignment.Center
             ) {
-                SwipeArrows(direction = direction, progress = slideOffset)
-
                 Box(
                     modifier = Modifier
                         .offset { IntOffset(slideOffset.dp.roundToPx(), 0) }
                         .alpha(circleFade.coerceIn(OnboardingAnim.FINGER_DOT_FADE_MIN, 1f))
-                        .size(OnboardingAnim.FINGER_DOT_SIZE_DP.dp)
+                        .size((OnboardingAnim.FINGER_DOT_SIZE_DP * 1.5f).dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = OnboardingAnim.FINGER_DOT_ALPHA))
-                )
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.Icon(
+                        imageVector = if (direction == SwipeDirection.RIGHT) Icons.AutoMirrored.Filled.ArrowForward else Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(36.dp))
@@ -498,48 +504,6 @@ private fun SwipeGuide(
             Spacer(modifier = Modifier.height(16.dp))
 
             StepDots(currentStep = step)
-        }
-    }
-}
-
-@Composable
-private fun SwipeArrows(
-    direction: SwipeDirection,
-    progress: Float
-) {
-    val normalizedProgress = (progress / OnboardingAnim.SWIPE_SLIDE_DISTANCE).let {
-        if (direction == SwipeDirection.LEFT) -it else it
-    }
-
-    Canvas(modifier = Modifier.size(220.dp, 80.dp)) {
-        val centerY = size.height / 2f
-
-        for (i in 0..2) {
-            val baseX = if (direction == SwipeDirection.RIGHT) {
-                size.width / 2f + OnboardingAnim.ARROW_OFFSET + (i * OnboardingAnim.ARROW_SPACING)
-            } else {
-                size.width / 2f - OnboardingAnim.ARROW_OFFSET - (i * OnboardingAnim.ARROW_SPACING)
-            }
-            val alpha = (0.1f + normalizedProgress * 0.25f * (3 - i) / 3f).coerceIn(0.06f, 0.35f)
-
-            val path = Path().apply {
-                if (direction == SwipeDirection.RIGHT) {
-                    moveTo(baseX - OnboardingAnim.ARROW_SIZE, centerY - OnboardingAnim.ARROW_SIZE)
-                    lineTo(baseX, centerY)
-                    lineTo(baseX - OnboardingAnim.ARROW_SIZE, centerY + OnboardingAnim.ARROW_SIZE)
-                } else {
-                    moveTo(baseX + OnboardingAnim.ARROW_SIZE, centerY - OnboardingAnim.ARROW_SIZE)
-                    lineTo(baseX, centerY)
-                    lineTo(baseX + OnboardingAnim.ARROW_SIZE, centerY + OnboardingAnim.ARROW_SIZE)
-                }
-            }
-            drawPath(
-                path = path,
-                color = Color.White.copy(alpha = alpha),
-                style = androidx.compose.ui.graphics.drawscope.Stroke(
-                    width = OnboardingAnim.ARROW_STROKE_WIDTH
-                )
-            )
         }
     }
 }
