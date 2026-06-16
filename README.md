@@ -7,7 +7,7 @@
   
   [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://android.com)
   [![Kotlin](https://img.shields.io/badge/Language-Kotlin-purple.svg)](https://kotlinlang.org)
-  [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 </div>
 
 ---
@@ -165,7 +165,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3 - see the [LICENSE](LICENSE) file for details.
 
 ---
 
