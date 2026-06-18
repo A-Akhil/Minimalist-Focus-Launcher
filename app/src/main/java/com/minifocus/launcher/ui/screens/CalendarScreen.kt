@@ -8,6 +8,7 @@
  * (at your option) any later version.
  */
 
+@file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 package com.minifocus.launcher.ui.screens
 
 import android.Manifest
@@ -22,6 +23,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,6 +64,7 @@ import androidx.compose.ui.res.stringResource
 import com.minifocus.launcher.R
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +72,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -107,7 +112,12 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
     }
 
     // Calendar state
-    var currentMonth by remember { mutableStateOf(YearMonth.now()) }
+    val initialMonth = remember { YearMonth.now() }
+    val START_PAGE = 50000
+    val pagerState = rememberPagerState(initialPage = START_PAGE) { 100000 }
+    val currentMonth = remember(pagerState.currentPage) {
+        initialMonth.plusMonths((pagerState.currentPage - START_PAGE).toLong())
+    }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     var daysWithEvents by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var selectedDateEvents by remember { mutableStateOf<List<CalendarEvent>>(emptyList()) }
@@ -209,14 +219,20 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
                 MonthHeader(
                     currentMonth = currentMonth,
                     onPreviousMonth = {
-                        currentMonth = currentMonth.minusMonths(1)
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        }
                     },
                     onNextMonth = {
-                        currentMonth = currentMonth.plusMonths(1)
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     },
                     onTapMonth = {
                         // Reset to today
-                        currentMonth = YearMonth.now()
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(START_PAGE)
+                        }
                         selectedDate = LocalDate.now()
                     }
                 )
@@ -226,15 +242,23 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
                 WeekdayHeader()
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Calendar grid
-                CalendarGrid(
-                    currentMonth = currentMonth,
-                    selectedDate = selectedDate,
-                    daysWithEvents = daysWithEvents,
-                    onDateSelected = { date ->
-                        selectedDate = date
+                // Calendar grid pager
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxWidth()
+                ) { page ->
+                    val pageMonth = remember(page) {
+                        initialMonth.plusMonths((page - START_PAGE).toLong())
                     }
-                )
+                    CalendarGrid(
+                        currentMonth = pageMonth,
+                        selectedDate = selectedDate,
+                        daysWithEvents = if (pageMonth == currentMonth) daysWithEvents else emptySet(),
+                        onDateSelected = { date ->
+                            selectedDate = date
+                        }
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider(
@@ -427,7 +451,7 @@ private fun CalendarGrid(
     val totalCells = startOffset + daysInMonth
     val rows = (totalCells + 6) / 7
 
-    Column {
+    Column(modifier = Modifier.fillMaxWidth()) {
         for (row in 0 until rows) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 for (col in 0 until 7) {
