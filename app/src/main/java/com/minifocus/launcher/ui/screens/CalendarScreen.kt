@@ -23,7 +23,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import java.time.Month
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,7 +51,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
@@ -64,7 +69,6 @@ import androidx.compose.ui.res.stringResource
 import com.minifocus.launcher.R
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,8 +76,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -91,7 +93,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
-import java.util.TimeZone
 
 @Composable
 fun CalendarScreen(selectedCalendarId: Long = -1L) {
@@ -119,9 +120,10 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
         initialMonth.plusMonths((pagerState.currentPage - START_PAGE).toLong())
     }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var daysWithEvents by remember { mutableStateOf<Set<Int>>(emptySet()) }
+    var daysWithEvents by remember { mutableStateOf<Map<YearMonth, Set<Int>>>(emptyMap()) }
     var selectedDateEvents by remember { mutableStateOf<List<CalendarEvent>>(emptyList()) }
     var showAddDialog by remember { mutableStateOf(false) }
+    var showMonthPicker by remember { mutableStateOf(false) }
     var deleteConfirmEvent by remember { mutableStateOf<CalendarEvent?>(null) }
 
     // Refresh counter to trigger reloads after mutations
@@ -139,11 +141,19 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
         }
     }
 
-    // Load days-with-events for the current month
+    // Load days-with-events for the current month and adjacent months
     LaunchedEffect(currentMonth, hasPermission, refreshTick) {
         if (hasPermission) {
-            daysWithEvents = withContext(Dispatchers.IO) {
-                calendarManager.getDaysWithEvents(currentMonth.year, currentMonth.monthValue)
+            withContext(Dispatchers.IO) {
+                val prevMonth = currentMonth.minusMonths(1)
+                val nextMonth = currentMonth.plusMonths(1)
+                
+                val newMap = mutableMapOf<YearMonth, Set<Int>>()
+                newMap[prevMonth] = calendarManager.getDaysWithEvents(prevMonth.year, prevMonth.monthValue)
+                newMap[currentMonth] = calendarManager.getDaysWithEvents(currentMonth.year, currentMonth.monthValue)
+                newMap[nextMonth] = calendarManager.getDaysWithEvents(nextMonth.year, nextMonth.monthValue)
+                
+                daysWithEvents = newMap
             }
         }
     }
@@ -229,6 +239,9 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
                         }
                     },
                     onTapMonth = {
+                        showMonthPicker = true
+                    },
+                    onLongPressMonth = {
                         // Reset to today
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(START_PAGE)
@@ -253,7 +266,7 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
                     CalendarGrid(
                         currentMonth = pageMonth,
                         selectedDate = selectedDate,
-                        daysWithEvents = if (pageMonth == currentMonth) daysWithEvents else emptySet(),
+                        daysWithEvents = daysWithEvents[pageMonth] ?: emptySet(),
                         onDateSelected = { date ->
                             selectedDate = date
                         }
@@ -320,17 +333,30 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
     }
 
     // Add event dialog
+    if (showMonthPicker) {
+        MonthYearPickerDialog(
+            currentMonth = currentMonth,
+            onDismiss = { showMonthPicker = false },
+            onMonthYearSelected = { targetYearMonth ->
+                showMonthPicker = false
+                val diffMonths = (targetYearMonth.year - initialMonth.year) * 12 + (targetYearMonth.monthValue - initialMonth.monthValue)
+                coroutineScope.launch {
+                    pagerState.scrollToPage(START_PAGE + diffMonths)
+                }
+            }
+        )
+    }
+
     if (showAddDialog) {
         AddEventDialog(
             selectedDate = selectedDate,
             onDismiss = { showAddDialog = false },
             onAdd = { title, hour, minute, durationMinutes ->
                 coroutineScope.launch {
-                    val cal = java.util.Calendar.getInstance().apply {
-                        set(selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth, hour, minute, 0)
-                        set(java.util.Calendar.MILLISECOND, 0)
-                    }
-                    val startMillis = cal.timeInMillis
+                    val startMillis = java.time.LocalDateTime.of(selectedDate, java.time.LocalTime.of(hour, minute))
+                        .atZone(java.time.ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli()
                     val endMillis = startMillis + durationMinutes * 60 * 1000L
                     withContext(Dispatchers.IO) {
                         val targetCalendar = calendarManager.getWritableCalendar(selectedCalendarId)
@@ -385,7 +411,8 @@ private fun MonthHeader(
     currentMonth: YearMonth,
     onPreviousMonth: () -> Unit,
     onNextMonth: () -> Unit,
-    onTapMonth: () -> Unit
+    onTapMonth: () -> Unit,
+    onLongPressMonth: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -404,7 +431,10 @@ private fun MonthHeader(
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.clickable { onTapMonth() }
+            modifier = Modifier.combinedClickable(
+                onClick = onTapMonth,
+                onLongClick = onLongPressMonth
+            )
         )
         IconButton(onClick = onNextMonth) {
             Icon(
@@ -443,7 +473,7 @@ private fun CalendarGrid(
     daysWithEvents: Set<Int>,
     onDateSelected: (LocalDate) -> Unit
 ) {
-    val today = remember { LocalDate.now() }
+    val today = LocalDate.now()
     val firstOfMonth = currentMonth.atDay(1)
     // Monday=1 ... Sunday=7; offset so Monday is column 0
     val startOffset = (firstOfMonth.dayOfWeek.value - 1)
@@ -744,4 +774,117 @@ private fun formatSelectedDate(date: LocalDate): String {
     }
     val month = date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())
     return "$dayLabel, $month ${date.dayOfMonth}"
+}
+
+@Composable
+private fun MonthYearPickerDialog(
+    currentMonth: YearMonth,
+    onDismiss: () -> Unit,
+    onMonthYearSelected: (YearMonth) -> Unit
+) {
+    var startYear by remember { mutableIntStateOf(currentMonth.year - 4) } 
+    var selectedYear by remember { mutableIntStateOf(currentMonth.year) }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp)
+        ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                // Year Header with Arrows
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { startYear -= 9 }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = "Previous Years",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Text(
+                        text = "$startYear - ${startYear + 8}",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+                    IconButton(onClick = { startYear += 9 }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = "Next Years",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 3x3 Year Grid
+                for (row in 0 until 3) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        for (col in 0 until 3) {
+                            val year = startYear + row * 3 + col
+                            val isSelected = year == selectedYear
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(4.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(
+                                        if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                        else Color.Transparent
+                                    )
+                                    .clickable { selectedYear = year }
+                                    .padding(vertical = 12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = year.toString(),
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // 4x3 Month Grid
+                val months = remember { Month.values() }
+                for (row in 0 until 4) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        for (col in 0 until 3) {
+                            val month = months[row * 3 + col]
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(4.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable { 
+                                        onMonthYearSelected(YearMonth.of(selectedYear, month))
+                                    }
+                                    .padding(vertical = 12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = month.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
