@@ -95,7 +95,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun CalendarScreen(selectedCalendarId: Long = -1L) {
+fun CalendarScreen(selectedCalendarId: Long = -1L, isActive: Boolean = true) {
     val context = LocalContext.current
     val calendarManager = remember { CalendarManager(context) }
     val coroutineScope = rememberCoroutineScope()
@@ -128,6 +128,16 @@ fun CalendarScreen(selectedCalendarId: Long = -1L) {
 
     // Refresh counter to trigger reloads after mutations
     var refreshTick by remember { mutableIntStateOf(0) }
+
+    // Reset state when screen becomes active again
+    LaunchedEffect(isActive) {
+        if (isActive) {
+            selectedDate = LocalDate.now()
+            if (pagerState.currentPage != START_PAGE) {
+                pagerState.scrollToPage(START_PAGE)
+            }
+        }
+    }
 
     // Request permissions on first render if not granted
     LaunchedEffect(Unit) {

@@ -857,7 +857,10 @@ fun LauncherApp(
                     Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
                         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (page) {
-                            0 -> CalendarScreen(selectedCalendarId = state.selectedCalendarId)
+                            0 -> CalendarScreen(
+                                selectedCalendarId = state.selectedCalendarId,
+                                isActive = pagerState.currentPage == 0
+                            )
                             1 -> TasksScreen(
                                 tasks = state.tasks,
                                 dailyTasks = state.dailyTasks,
