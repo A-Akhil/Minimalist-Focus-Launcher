@@ -480,6 +480,7 @@ private fun CalendarGrid(
     val daysInMonth = currentMonth.lengthOfMonth()
     val totalCells = startOffset + daysInMonth
     val rows = (totalCells + 6) / 7
+    val prevMonthDays = currentMonth.minusMonths(1).lengthOfMonth()
 
     Column(modifier = Modifier.fillMaxWidth()) {
         for (row in 0 until rows) {
@@ -487,9 +488,30 @@ private fun CalendarGrid(
                 for (col in 0 until 7) {
                     val cellIndex = row * 7 + col
                     val dayNumber = cellIndex - startOffset + 1
-                    if (dayNumber < 1 || dayNumber > daysInMonth) {
-                        // Empty cell
-                        Box(modifier = Modifier.weight(1f).aspectRatio(1f))
+                    if (dayNumber < 1) {
+                        val prevDay = prevMonthDays + dayNumber
+                        Box(
+                            modifier = Modifier.weight(1f).aspectRatio(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = prevDay.toString(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                                fontSize = 14.sp
+                            )
+                        }
+                    } else if (dayNumber > daysInMonth) {
+                        val nextDay = dayNumber - daysInMonth
+                        Box(
+                            modifier = Modifier.weight(1f).aspectRatio(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = nextDay.toString(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                                fontSize = 14.sp
+                            )
+                        }
                     } else {
                         val date = currentMonth.atDay(dayNumber)
                         val isSelected = date == selectedDate
