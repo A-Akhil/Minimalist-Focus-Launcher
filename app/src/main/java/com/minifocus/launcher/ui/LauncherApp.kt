@@ -2801,14 +2801,17 @@ private fun SettingsScreen(
             onClick = onOpenAbout
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        val showDebugOptions = false
+        if (showDebugOptions) {
+            Spacer(modifier = Modifier.height(32.dp))
 
-        // Dev/debug: replay onboarding
-        SettingsRow(
-            title = stringResource(R.string.onboarding_replay),
-            subtitle = null,
-            onClick = onResetOnboarding
-        )
+            // Dev/debug: replay onboarding
+            SettingsRow(
+                title = stringResource(R.string.onboarding_replay),
+                subtitle = null,
+                onClick = onResetOnboarding
+            )
+        }
     }
 }
 
