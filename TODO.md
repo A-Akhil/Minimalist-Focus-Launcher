@@ -469,9 +469,17 @@ Replace blank screens with motivational or aesthetic empty state components when
 
 ---
 
+## 19. Global App Localization
+**Status:** Completed (Released in v2.3.0)
+
+### Description
+Support multiple languages (Portuguese, French, Russian, Hindi, Tamil, Japanese, Indonesian, Turkish) via standard Android string resources and dynamic per-app language selection.
+
+---
+
 ## Future Enhancements
 - [ ] Widget support on home screen (But the thing is we need in black and white theme)
 - [ ] Gesture customization (swipe actions)
 - [ ] Theme color customization
-- [ ] Backup/restore settings and data
+- [x] Backup/restore settings and data (Completed in v2.0.1)
 - [ ] App usage statistics integration
