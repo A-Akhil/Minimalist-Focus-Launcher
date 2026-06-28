@@ -720,7 +720,6 @@ fun LauncherApp(
                 state.isHomeSettingsVisible -> {
                     HomeSettingsScreen(
                         showDailyTasksOnHome = state.showDailyTasksOnHome,
-                        showDailyTasksHomeSection = state.showDailyTasksHomeSection,
                         doubleTapLockScreen = state.doubleTapLockScreen,
                         lockAccessibilityGranted = permissionsState.lockAccessibilityGranted,
                         bottomLeftApp = state.bottomLeft,
@@ -2818,7 +2817,6 @@ private fun SettingsScreen(
 @Composable
 private fun HomeSettingsScreen(
     showDailyTasksOnHome: Boolean,
-    showDailyTasksHomeSection: Boolean,
     doubleTapLockScreen: Boolean,
     lockAccessibilityGranted: Boolean,
     bottomLeftApp: AppEntry?,
@@ -2862,14 +2860,7 @@ private fun HomeSettingsScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )
-                val description = buildString {
-                    append(stringResource(R.string.home_settings_daily_tasks_hint))
-                    if (showDailyTasksOnHome && !showDailyTasksHomeSection) {
-                        append(" ${stringResource(R.string.home_settings_daily_tasks_all_complete)}")
-                    } else if (showDailyTasksOnHome) {
-                        append(" ${stringResource(R.string.home_settings_daily_tasks_complete_to_hide)}")
-                    }
-                }
+                val description = stringResource(R.string.home_settings_daily_tasks_hint)
                 Text(
                     text = description,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -2880,16 +2871,6 @@ private fun HomeSettingsScreen(
             Switch(
                 checked = showDailyTasksOnHome,
                 onCheckedChange = onToggleDailyTasksOnHome
-            )
-        }
-
-        if (showDailyTasksOnHome) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(R.string.home_settings_daily_tasks_auto_hide),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 13.sp,
-                lineHeight = 18.sp
             )
         }
 
@@ -2921,21 +2902,20 @@ private fun HomeSettingsScreen(
                 }
                 Text(
                     text = description,
-                    color = if (!lockAccessibilityGranted) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (!lockAccessibilityGranted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
             Switch(
-                checked = doubleTapLockScreen,
+                checked = doubleTapLockScreen && lockAccessibilityGranted,
                 onCheckedChange = { enabled ->
                     if (enabled && !lockAccessibilityGranted) {
                         onRequestLockAccessibility()
                     } else {
                         onToggleDoubleTapLockScreen(enabled)
                     }
-                },
-                enabled = lockAccessibilityGranted || !doubleTapLockScreen
+                }
             )
         }
 
