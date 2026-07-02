@@ -56,7 +56,9 @@ fun NotificationSettingsScreen(
     onOpenLogRetention: () -> Unit,
     onOpenAppFilters: () -> Unit,
     onOpenLogViewer: () -> Unit,
-    onNotificationInboxToggle: (Boolean) -> Unit
+    onNotificationInboxToggle: (Boolean) -> Unit,
+    notificationListenerGranted: Boolean,
+    onRequestNotificationListener: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -94,15 +96,21 @@ fun NotificationSettingsScreen(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = stringResource(R.string.notif_settings_capture_hint),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = if (notificationListenerGranted) stringResource(R.string.notif_settings_capture_hint) else stringResource(R.string.summary_inbox_disabled),
+                    color = if (notificationListenerGranted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
             Switch(
-                checked = notificationInboxEnabled,
-                onCheckedChange = onNotificationInboxToggle
+                checked = notificationInboxEnabled && notificationListenerGranted,
+                onCheckedChange = { enabled ->
+                    if (enabled && !notificationListenerGranted) {
+                        onRequestNotificationListener()
+                    } else {
+                        onNotificationInboxToggle(enabled)
+                    }
+                }
             )
         }
 

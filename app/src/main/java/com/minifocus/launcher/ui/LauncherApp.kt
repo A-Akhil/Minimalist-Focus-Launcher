@@ -778,7 +778,9 @@ fun LauncherApp(
                         onOpenNotificationRetention = { showNotificationRetentionDialog.value = true },
                         onOpenLogRetention = { showLogRetentionDialog.value = true },
                         onOpenLogViewer = { openLogViewer() },
-                        onNotificationInboxToggle = onNotificationInboxEnabledChange
+                        onNotificationInboxToggle = onNotificationInboxEnabledChange,
+                        notificationListenerGranted = permissionsState.notificationListenerGranted,
+                        onRequestNotificationListener = onOpenPermissionManager
                     )
                 }
                 state.isLogViewerVisible -> {

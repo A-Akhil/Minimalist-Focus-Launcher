@@ -65,7 +65,7 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
     }
 
     fun observeClockFormat(): Flow<ClockFormat> = dataStore.data.map { prefs ->
-        prefs[Keys.clockFormat]?.let { runCatching { ClockFormat.valueOf(it) }.getOrNull() } ?: ClockFormat.H24
+        prefs[Keys.clockFormat]?.let { runCatching { ClockFormat.valueOf(it) }.getOrNull() } ?: ClockFormat.H12
     }
 
     fun observeTextSize(): Flow<TextSize> = dataStore.data.map { prefs ->
@@ -80,11 +80,11 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
     }
 
     fun observeKeyboardSearchOnSwipe(): Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.keyboardSearchOnSwipe]?.let { it == 1 } ?: false
+        prefs[Keys.keyboardSearchOnSwipe]?.let { it == 1 } ?: true
     }
 
     fun observeShowSeconds(): Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.showSeconds]?.let { it == 1 } ?: false
+        prefs[Keys.showSeconds]?.let { it == 1 } ?: true
     }
 
     fun observeShowDailyTasksOnHome(): Flow<Boolean> = dataStore.data.map { prefs ->
@@ -96,7 +96,7 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
     }
 
     fun observeNotificationInboxEnabled(): Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.notificationInboxEnabled]?.let { it == 1 } ?: false
+        prefs[Keys.notificationInboxEnabled]?.let { it == 1 } ?: true
     }
 
     fun observePermissionOnboardingAcknowledged(): Flow<Boolean> = dataStore.data.map { prefs ->
@@ -104,7 +104,7 @@ class SettingsManager(private val dataStore: DataStore<Preferences>) {
     }
 
     fun observeDoubleTapLockScreen(): Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.doubleTapLockScreen]?.let { it == 1 } ?: false
+        prefs[Keys.doubleTapLockScreen]?.let { it == 1 } ?: true
     }
 
     fun observeOnboardingComplete(): Flow<Boolean> = dataStore.data.map { prefs ->
