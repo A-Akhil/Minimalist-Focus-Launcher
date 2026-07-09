@@ -52,8 +52,8 @@ class SearchManager(
 
     private suspend fun buildHiddenAppLaunch(appName: String): List<SearchResult> {
         if (appName.isBlank()) return emptyList()
-    val hiddenApps = appsManager.observeHiddenApps().first()
-        val matches = hiddenApps.filter { it.label.contains(appName, ignoreCase = true) }
+        val hiddenApps = appsManager.observeHiddenApps().first()
+        val matches = hiddenApps.filter { it.label.contains(appName, ignoreCase = true) || getAcronym(it.label).startsWith(appName, ignoreCase = true) }
         return matches.map { SearchResult.App(it.copy(isHidden = true)) }
     }
 
@@ -65,7 +65,7 @@ class SearchManager(
 
         val results = mutableListOf<SearchResult>()
 
-        results += apps.filter { it.label.contains(query, ignoreCase = true) }
+        results += apps.filter { it.label.contains(query, ignoreCase = true) || getAcronym(it.label).startsWith(query, ignoreCase = true) }
             .sortedByDescending { app ->
                 val usage = stats[app.packageName]?.totalScore ?: 0.0
                 val multiplier = calculateMatchMultiplier(app.label, query)
@@ -73,7 +73,7 @@ class SearchManager(
             }
             .map { SearchResult.App(it) }
             
-        results += hidden.filter { it.label.contains(query, ignoreCase = true) }
+        results += hidden.filter { it.label.contains(query, ignoreCase = true) || getAcronym(it.label).startsWith(query, ignoreCase = true) }
             .map { SearchResult.App(it) }
         results += tasks.filter { it.title.contains(query, ignoreCase = true) }
             .map { SearchResult.Task(it) }
@@ -82,24 +82,48 @@ class SearchManager(
     }
 
     private fun calculateMatchMultiplier(label: String, query: String): Double {
-        val isSingleChar = query.length == 1
-        
-        // Priority 1: Starts with query
-        if (label.startsWith(query, ignoreCase = true)) {
-            return if (isSingleChar) 1000.0 else 4.0 // Boosted for strong prefix preference
+        // Tier 1: Exact Match (Learning Rate: 100x)
+        if (label.equals(query, ignoreCase = true)) {
+            return 100.0
         }
 
-        // Priority 2: Word starts with query (e.g. "Proton VPN" matches "vp")
-        // Check for boundary: index > 0 and prev char is not letter/digit
+        // Tier 2: Acronym Match (Learning Rate: 50x)
+        val acronym = getAcronym(label)
+        if (acronym.startsWith(query, ignoreCase = true)) {
+            return 50.0
+        }
+
+        // Tier 3: Prefix Match (Learning Rate: 30x)
+        if (label.startsWith(query, ignoreCase = true)) {
+            return 30.0
+        }
+
+        // Tier 4: Word Start Match (Learning Rate: 10x)
         var index = label.indexOf(query, ignoreCase = true)
         while (index >= 0) {
             if (index > 0 && !Character.isLetterOrDigit(label[index - 1])) {
-                return if (isSingleChar) 500.0 else 3.0 // Significant boost for word start
+                return 10.0
             }
             index = label.indexOf(query, index + 1, ignoreCase = true)
         }
 
-        // Priority 3: Just contains
+        // Tier 5: Infix Match (Learning Rate: 1x)
         return 1.0
+    }
+
+    private fun getAcronym(label: String): String {
+        val builder = java.lang.StringBuilder()
+        var isWordStart = true
+        for (char in label) {
+            if (char.isLetterOrDigit()) {
+                if (isWordStart) {
+                    builder.append(char)
+                    isWordStart = false
+                }
+            } else {
+                isWordStart = true
+            }
+        }
+        return builder.toString()
     }
 }
