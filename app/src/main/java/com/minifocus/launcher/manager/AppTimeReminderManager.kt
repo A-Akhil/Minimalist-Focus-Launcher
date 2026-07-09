@@ -76,49 +76,6 @@ class AppTimeReminderManager(
         dao.delete(packageName)
     }
 
-    /**
-     * Seeds the table with well-known social media and gaming apps
-     * that are actually installed on the device. Only runs if the
-     * table is completely empty (first launch).
-     */
-    suspend fun seedDefaultsIfEmpty(context: Context) {
-        if (dao.count() > 0) return
-
-        val pm = context.packageManager
-        val defaults = DEFAULT_TRACKED_APPS.mapNotNull { (pkg, label) ->
-            if (isInstalled(pm, pkg)) {
-                val resolvedLabel = resolveAppLabel(pm, pkg) ?: label
-                AppTimeReminderEntity(
-                    packageName = pkg,
-                    appLabel = resolvedLabel,
-                    defaultDurationMinutes = null,
-                    expiryAction = "NOTIFICATION"
-                )
-            } else null
-        }
-        if (defaults.isNotEmpty()) {
-            dao.insertIfAbsent(defaults)
-        }
-    }
-
-    private fun isInstalled(pm: PackageManager, packageName: String): Boolean {
-        return try {
-            pm.getPackageInfo(packageName, 0)
-            true
-        } catch (_: PackageManager.NameNotFoundException) {
-            false
-        }
-    }
-
-    private fun resolveAppLabel(pm: PackageManager, packageName: String): String? {
-        return try {
-            val info = pm.getApplicationInfo(packageName, 0)
-            pm.getApplicationLabel(info).toString()
-        } catch (_: Exception) {
-            null
-        }
-    }
-
     companion object {
         // Social media and messaging apps
         private val DEFAULT_TRACKED_APPS = listOf(

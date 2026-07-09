@@ -97,9 +97,7 @@ class LauncherApplication : Application() {
             calendarManager = calendarManager
         )
 
-        appScope.launch {
-            appTimeReminderManager.seedDefaultsIfEmpty(this@LauncherApplication)
-        }
+
 
         appScope.launch {
             settingsManager.observeNotificationInboxEnabled().collectLatest { enabled ->
