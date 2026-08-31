@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## v2.7.0 (Released - Play Store) — 2026-08-31
+
+### App Drawer Search
+- Added acronym search support, allowing you to find apps by their initials (e.g., "cod" for Call Of Duty).
+- Implemented a tiered ranking algorithm so exact and prefix matches correctly outrank heavily-used infix matches.
+
+### Settings & Onboarding
+- Established default preference values for first-time users, offering a smoother initial setup.
+- Realigned the notification settings switch logic to ensure a consistent experience.
+- Removed the automatic seeding of app time reminders during startup to prevent unintended tracker additions.
+
+### Maintenance & Compliance
+- Updated `targetSdk` and `compileSdk` to 36 (Android 16) to ensure compliance with Google Play requirements.
+- Updated Code of Conduct to v3.0.
+
 ## v2.6.1 (Released - Play Store) — 2026-06-28
 
 ### Calendar
