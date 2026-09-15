@@ -50,9 +50,12 @@ android {
                 debugSymbolLevel = "FULL"
             }
             signingConfig = signingConfigs.getByName("release")
+            buildConfigField("String", "PATCH_URL", "\"https://raw.githubusercontent.com/A-Akhil/Minimalist-Focus-Launcher/main/remote-patch/patch.json\"")
         }
         debug {
             isMinifyEnabled = false
+            // Debug builds read patches from a separate branch so tests never reach users.
+            buildConfigField("String", "PATCH_URL", "\"https://raw.githubusercontent.com/A-Akhil/Minimalist-Focus-Launcher/remote-patch-test/remote-patch/patch.json\"")
         }
     }
 
@@ -67,6 +70,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

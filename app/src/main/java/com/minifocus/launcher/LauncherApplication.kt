@@ -35,7 +35,9 @@ import com.minifocus.launcher.manager.AppUsageStatsManager
 import com.minifocus.launcher.manager.AppTimeReminderManager
 import com.minifocus.launcher.manager.CalendarManager
 import com.minifocus.launcher.service.AppLockMonitorService
+import com.minifocus.launcher.update.RemotePatchManager
 import com.minifocus.launcher.worker.NotificationMaintenanceWorker
+import com.minifocus.launcher.worker.RemotePatchWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -80,6 +82,10 @@ class LauncherApplication : Application() {
             logger = inboxLogger
         )
         val settingsBackupManager = SettingsBackupManager()
+        val remotePatchManager = RemotePatchManager(
+            context = this,
+            appVersionCode = packageManager.getPackageInfo(packageName, 0).longVersionCode
+        )
         container = AppContainer(
             tasksManager = tasksManager,
             hiddenAppsManager = hiddenManager,
@@ -94,7 +100,8 @@ class LauncherApplication : Application() {
             applicationScope = appScope,
             appUsageStatsManager = appUsageStatsManager,
             appTimeReminderManager = appTimeReminderManager,
-            calendarManager = calendarManager
+            calendarManager = calendarManager,
+            remotePatchManager = remotePatchManager
         )
 
 
@@ -138,7 +145,14 @@ class LauncherApplication : Application() {
             }
         }
 
+        appScope.launch {
+            remotePatchManager.loadApplied()
+        }
+
         NotificationMaintenanceWorker.schedule(this)
+        if (remotePatchManager.isConfigured) {
+            RemotePatchWorker.schedule(this)
+        }
     }
 
     override fun onTerminate() {
@@ -161,5 +175,6 @@ class AppContainer(
     val applicationScope: CoroutineScope,
     val appUsageStatsManager: AppUsageStatsManager,
     val appTimeReminderManager: AppTimeReminderManager,
-    val calendarManager: CalendarManager
+    val calendarManager: CalendarManager,
+    val remotePatchManager: RemotePatchManager
 )
