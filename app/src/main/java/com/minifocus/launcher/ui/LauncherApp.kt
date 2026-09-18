@@ -167,6 +167,7 @@ import com.minifocus.launcher.data.entity.AppTimeReminderEntity
 import com.minifocus.launcher.service.AppTimeReminderReceiver
 import com.minifocus.launcher.ui.theme.LocalTextMultiplier
 import com.minifocus.launcher.ui.theme.TextSizeProvider
+import com.minifocus.launcher.update.HomePage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlin.math.roundToInt
@@ -253,9 +254,22 @@ fun LauncherApp(
     isOnboarding: Boolean = false,
     onOnboardingComplete: () -> Unit = {},
     onRootBack: () -> Unit = {},
-    onConsumeMessage: () -> Unit = {}
+    onConsumeMessage: () -> Unit = {},
+    homePages: List<HomePage> = HomePage.DEFAULT
 ) {
-    val pagerState = rememberPagerState(initialPage = 2, pageCount = { 4 })
+    // Page order can be changed by a remote patch; a missing page has index -1.
+    val calendarIndex = homePages.indexOf(HomePage.CALENDAR)
+    val tasksIndex = homePages.indexOf(HomePage.TASKS)
+    val homeIndex = homePages.indexOf(HomePage.HOME)
+    val appsIndex = homePages.indexOf(HomePage.APPS)
+    val pagerState = rememberPagerState(initialPage = homeIndex, pageCount = { homePages.size })
+
+    // A patch that rearranges pages while the launcher is open shifts indices; go back home.
+    LaunchedEffect(homePages) {
+        if (pagerState.currentPage != homeIndex) {
+            pagerState.scrollToPage(homeIndex)
+        }
+    }
 
     // -- Onboarding step state machine --
     val onboardingStep = remember { mutableStateOf(OnboardingSteps.WELCOME) }
@@ -283,22 +297,22 @@ fun LauncherApp(
             when (onboardingStep.value) {
                 // WELCOME does not track pager, advanced via tap callback
                 OnboardingSteps.SWIPE_TO_TASKS -> {
-                    if (pagerState.settledPage == 1) {
+                    if (pagerState.settledPage == tasksIndex) {
                         onboardingStep.value = OnboardingSteps.SWIPE_TO_CALENDAR
                     }
                 }
                 OnboardingSteps.SWIPE_TO_CALENDAR -> {
-                    if (pagerState.settledPage == 0) {
+                    if (pagerState.settledPage == calendarIndex) {
                         onboardingStep.value = OnboardingSteps.SWIPE_BACK_HOME
                     }
                 }
                 OnboardingSteps.SWIPE_BACK_HOME -> {
-                    if (pagerState.settledPage == 2) {
+                    if (pagerState.settledPage == homeIndex) {
                         onboardingStep.value = OnboardingSteps.SWIPE_TO_DRAWER
                     }
                 }
                 OnboardingSteps.SWIPE_TO_DRAWER -> {
-                    if (pagerState.settledPage == 3) {
+                    if (pagerState.settledPage == appsIndex) {
                         onboardingStep.value = OnboardingSteps.LONG_PRESS_TO_PIN
                     }
                 }
@@ -327,7 +341,7 @@ fun LauncherApp(
     val bottomIconPickerSlot = remember { mutableStateOf<BottomIconSlot?>(null) }
     val searchVisible = state.isSearchVisible
     val shouldShowInlineSearch = state.isKeyboardSearchOnSwipe
-    val shouldFocusInlineSearch = shouldShowInlineSearch && pagerState.currentPage == 3
+    val shouldFocusInlineSearch = shouldShowInlineSearch && pagerState.currentPage == appsIndex
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val showNotificationRetentionDialog = remember { mutableStateOf(false) }
@@ -363,14 +377,14 @@ fun LauncherApp(
         state.isCalendarSettingsVisible
 
     LaunchedEffect(state.homeResetTick) {
-        if (pagerState.currentPage != 2) {
-            pagerState.scrollToPage(2)
+        if (pagerState.currentPage != homeIndex) {
+            pagerState.scrollToPage(homeIndex)
         }
     }
 
     LaunchedEffect(shouldSnapToHome) {
-        if (shouldSnapToHome && pagerState.currentPage != 2) {
-            pagerState.scrollToPage(2)
+        if (shouldSnapToHome && pagerState.currentPage != homeIndex) {
+            pagerState.scrollToPage(homeIndex)
         }
     }
 
@@ -592,15 +606,15 @@ fun LauncherApp(
                 onSettingsVisibilityChange(true)
             }
             searchVisible -> onSearchVisibilityChange(false)
-            pagerState.currentPage != 2 -> {
-                coroutineScope.launch { pagerState.scrollToPage(2) }
+            pagerState.currentPage != homeIndex -> {
+                coroutineScope.launch { pagerState.scrollToPage(homeIndex) }
             }
             else -> onRootBack()
         }
     }
 
     LaunchedEffect(pagerState.currentPage) {
-        if (pagerState.currentPage != 3) {
+        if (pagerState.currentPage != appsIndex) {
             focusManager.clearFocus(force = true)
             keyboardController?.hide()
             if (state.searchQuery.isNotEmpty()) {
@@ -610,7 +624,7 @@ fun LauncherApp(
     }
 
     LaunchedEffect(shouldShowInlineSearch, searchVisible, pagerState.currentPage) {
-        if (shouldShowInlineSearch && pagerState.currentPage == 3 && searchVisible) {
+        if (shouldShowInlineSearch && pagerState.currentPage == appsIndex && searchVisible) {
             onSearchVisibilityChange(false)
         }
     }
@@ -622,7 +636,7 @@ fun LauncherApp(
     }
 
     LaunchedEffect(pagerState.currentPage, shouldShowInlineSearch) {
-        if (pagerState.currentPage != 3 && shouldShowInlineSearch && state.searchQuery.isNotEmpty()) {
+        if (pagerState.currentPage != appsIndex && shouldShowInlineSearch && state.searchQuery.isNotEmpty()) {
             onSearchQueryChange("")
         }
     }
@@ -672,6 +686,7 @@ fun LauncherApp(
                             onCalendarSettingsVisibilityChange(true)
                         },
                         onOpenLanguageSettings = { onLanguageSettingsVisibilityChange(true) },
+                        showCalendarSettings = calendarIndex >= 0,
                         selectedCalendarAccountName = state.selectedCalendarAccountName,
                         trackedReminderAppsCount = state.trackedReminderApps.size,
                         onResetOnboarding = onResetOnboarding,
@@ -857,12 +872,12 @@ fun LauncherApp(
 
                     Box(modifier = Modifier.fillMaxSize().nestedScroll(nestedScrollConnection)) {
                         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                        when (page) {
-                            0 -> CalendarScreen(
+                        when (homePages.getOrNull(page)) {
+                            HomePage.CALENDAR -> CalendarScreen(
                                 selectedCalendarId = state.selectedCalendarId,
-                                isActive = pagerState.currentPage == 0
+                                isActive = pagerState.currentPage == calendarIndex
                             )
-                            1 -> TasksScreen(
+                            HomePage.TASKS -> TasksScreen(
                                 tasks = state.tasks,
                                 dailyTasks = state.dailyTasks,
                                 heldDailyTaskIds = state.heldDailyTaskIds,
@@ -877,7 +892,7 @@ fun LauncherApp(
                                 onDailyTaskCompleted = onDailyTaskCompleted,
                                 onDailyTaskReset = onDailyTaskReset
                             )
-                            2 -> HomeScreen(
+                            HomePage.HOME -> HomeScreen(
                                 state = state,
                                 onLaunchApp = { entry ->
                                     if (!isOnboarding) {
@@ -904,9 +919,9 @@ fun LauncherApp(
                                 onAddTrackedReminderApp = onAddTrackedReminderApp,
                                 onRemoveTrackedReminderApp = onRemoveTrackedReminderApp
                             )
-                            3 -> AllAppsScreen(
+                            HomePage.APPS -> AllAppsScreen(
                                 apps = state.allApps,
-                                isDrawerVisible = pagerState.currentPage == 3,
+                                isDrawerVisible = pagerState.currentPage == appsIndex,
                                 keyboardOnSwipe = if (isOnboarding) false else shouldShowInlineSearch,
                                 searchQuery = state.searchQuery,
                                 shouldFocusSearch = if (isOnboarding) false else shouldFocusInlineSearch,
@@ -924,7 +939,7 @@ fun LauncherApp(
                                             onLaunchApp,
                                             navigateToHome = {
                                                 coroutineScope.launch {
-                                                    pagerState.scrollToPage(2)
+                                                    pagerState.scrollToPage(homeIndex)
                                                 }
                                             },
                                             trackedPackages = trackedPackages,
@@ -957,6 +972,7 @@ fun LauncherApp(
                                     }
                                 }
                             )
+                            null -> {}
                         }
                     }
 
@@ -2605,6 +2621,7 @@ private fun SettingsScreen(
     onOpenAppTimeReminderSettings: () -> Unit,
     onOpenCalendarSettings: () -> Unit,
     onOpenLanguageSettings: () -> Unit,
+    showCalendarSettings: Boolean,
     selectedCalendarAccountName: String,
     trackedReminderAppsCount: Int,
     onResetOnboarding: () -> Unit = {},
@@ -2749,18 +2766,21 @@ private fun SettingsScreen(
             onClick = onOpenAppearanceSettings
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        // Hidden together with the calendar page when a remote patch removes it.
+        if (showCalendarSettings) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        val calendarSummary = if (selectedCalendarAccountName.isNotEmpty()) {
-            selectedCalendarAccountName
-        } else {
-            "Auto-detect"
+            val calendarSummary = if (selectedCalendarAccountName.isNotEmpty()) {
+                selectedCalendarAccountName
+            } else {
+                "Auto-detect"
+            }
+            SettingsRow(
+                title = "Calendar",
+                subtitle = calendarSummary,
+                onClick = onOpenCalendarSettings
+            )
         }
-        SettingsRow(
-            title = "Calendar",
-            subtitle = calendarSummary,
-            onClick = onOpenCalendarSettings
-        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

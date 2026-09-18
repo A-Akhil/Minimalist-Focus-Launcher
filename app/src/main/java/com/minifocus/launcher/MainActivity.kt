@@ -39,6 +39,7 @@ import androidx.activity.viewModels
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,6 +64,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
 import android.graphics.Color as AndroidColor
 import com.minifocus.launcher.model.LauncherTheme
+import com.minifocus.launcher.update.RemoteConfig
 
 class MainActivity : ComponentActivity() {
 
@@ -228,6 +230,9 @@ class MainActivity : ComponentActivity() {
                     .observeOnboardingComplete()
                     .collectAsStateWithLifecycle(initialOnboardingComplete)
                 val restrictedHint by notificationRestrictionHint.collectAsStateWithLifecycle()
+                val remoteValues by (application as LauncherApplication).container
+                    .remotePatchManager.values.collectAsStateWithLifecycle()
+                val remoteConfig = remember(remoteValues) { RemoteConfig.from(remoteValues) }
                 
                 val showPermissionScreen = manualPermissionManagerVisible || (!permissionsAcknowledged && !isAllSetScreenVisible)
 
@@ -342,7 +347,7 @@ class MainActivity : ComponentActivity() {
                     )
                 } else if (!showPermissionScreen) {
                     LauncherApp(
-                        state = state,
+                        state = remoteConfig.applyTo(state),
                         notificationInboxState = inboxState,
                         notificationFilterState = filterState,
                         permissionsState = permissions,
@@ -432,6 +437,7 @@ class MainActivity : ComponentActivity() {
                                 settingsManager.setPermissionOnboardingAcknowledged(false)
                             }
                         },
+                        homePages = remoteConfig.homePages,
                     )
                 } else {
                     PermissionScreen(
