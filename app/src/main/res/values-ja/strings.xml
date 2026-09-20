@@ -257,6 +257,14 @@
     <string name="about_feedback_hint">バグ報告はこちら:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">またはメールでお送りください:</string>
+    <string name="about_updates_section">アップデート</string>
+    <string name="about_check_updates">アップデートを確認</string>
+    <string name="about_checking_updates">確認中…</string>
+    <string name="about_update_applied">アップデートを適用しました</string>
+    <string name="about_up_to_date">最新の状態です</string>
+    <string name="about_update_failed">アップデートを確認できませんでした。インターネット接続を確認してください。</string>
+    <string name="about_patch_version">パッチ %d</string>
+    <string name="about_play_update_available">Play ストアに新しいバージョンがあります</string>
     <string name="permissions_title">必要な権限</string>
     <string name="permissions_subtitle">アプリを機能させるためにいくつかの権限が必要です。</string>
     <string name="permissions_notification_access">通知へのアクセス</string>

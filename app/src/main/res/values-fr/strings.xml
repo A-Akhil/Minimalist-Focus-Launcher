@@ -257,6 +257,14 @@
     <string name="about_feedback_hint">Pour les rapports de bugs :</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Ou envoyez un email à :</string>
+    <string name="about_updates_section">Mises à jour</string>
+    <string name="about_check_updates">Rechercher des mises à jour</string>
+    <string name="about_checking_updates">Vérification…</string>
+    <string name="about_update_applied">Mise à jour appliquée</string>
+    <string name="about_up_to_date">Vous êtes à jour</string>
+    <string name="about_update_failed">Impossible de rechercher des mises à jour. Vérifiez votre connexion internet.</string>
+    <string name="about_patch_version">Correctif %d</string>
+    <string name="about_play_update_available">Une nouvelle version est disponible sur le Play Store</string>
     <string name="permissions_title">Permissions requises</string>
     <string name="permissions_subtitle">Nous avons besoin de quelques permissions pour garder le contrôle.</string>
     <string name="permissions_notification_access">Accès aux notifications</string>

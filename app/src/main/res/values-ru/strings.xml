@@ -265,6 +265,14 @@
     <string name="about_feedback_hint">Для баг-репортов:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Или отправьте письмо на:</string>
+    <string name="about_updates_section">Обновления</string>
+    <string name="about_check_updates">Проверить обновления</string>
+    <string name="about_checking_updates">Проверка…</string>
+    <string name="about_update_applied">Обновление применено</string>
+    <string name="about_up_to_date">У вас последняя версия</string>
+    <string name="about_update_failed">Не удалось проверить обновления. Проверьте подключение к интернету.</string>
+    <string name="about_patch_version">Патч %d</string>
+    <string name="about_play_update_available">В Play Маркете доступна новая версия</string>
     <string name="permissions_title">Требуются разрешения</string>
     <string name="permissions_subtitle">Нам нужно несколько разрешений для контроля.</string>
     <string name="permissions_notification_access">Доступ к уведомлениям</string>

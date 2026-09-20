@@ -257,6 +257,14 @@
     <string name="about_feedback_hint">Hata raporları için:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Veya e-posta gönderin:</string>
+    <string name="about_updates_section">Güncellemeler</string>
+    <string name="about_check_updates">Güncellemeleri denetle</string>
+    <string name="about_checking_updates">Denetleniyor…</string>
+    <string name="about_update_applied">Güncelleme uygulandı</string>
+    <string name="about_up_to_date">Güncelsiniz</string>
+    <string name="about_update_failed">Güncellemeler denetlenemedi. İnternet bağlantınızı kontrol edin.</string>
+    <string name="about_patch_version">Yama %d</string>
+    <string name="about_play_update_available">Play Store\'da yeni bir sürüm var</string>
     <string name="permissions_title">İzinler gerekli</string>
     <string name="permissions_subtitle">Kontrolü sağlamak için birkaç izne ihtiyacımız var.</string>
     <string name="permissions_notification_access">Bildirim erişimi</string>

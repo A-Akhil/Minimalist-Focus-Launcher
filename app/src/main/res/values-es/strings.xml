@@ -227,6 +227,14 @@
     <string name="about_feedback_section">Comentarios y problemas</string>
     <string name="about_feedback_hint">Para informes de errores y solicitudes de funciones:</string>
     <string name="about_email_hint">O envía un correo a:</string>
+    <string name="about_updates_section">Actualizaciones</string>
+    <string name="about_check_updates">Buscar actualizaciones</string>
+    <string name="about_checking_updates">Comprobando…</string>
+    <string name="about_update_applied">Actualización aplicada</string>
+    <string name="about_up_to_date">Todo está actualizado</string>
+    <string name="about_update_failed">No se pudo buscar actualizaciones. Comprueba tu conexión a internet.</string>
+    <string name="about_patch_version">Parche %d</string>
+    <string name="about_play_update_available">Hay una nueva versión disponible en Play Store</string>
 
     <!-- Permissions Screen -->
     <string name="permissions_title">Permisos requeridos</string>

@@ -257,6 +257,14 @@
     <string name="about_feedback_hint">बग रिपोर्ट के लिए:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">या हमें ईमेल करें:</string>
+    <string name="about_updates_section">अपडेट</string>
+    <string name="about_check_updates">अपडेट जांचें</string>
+    <string name="about_checking_updates">जांच हो रही है…</string>
+    <string name="about_update_applied">अपडेट लागू हो गया</string>
+    <string name="about_up_to_date">आप अप टू डेट हैं</string>
+    <string name="about_update_failed">अपडेट नहीं जांच सके। अपना इंटरनेट कनेक्शन जांचें।</string>
+    <string name="about_patch_version">पैच %d</string>
+    <string name="about_play_update_available">Play Store पर नया वर्शन उपलब्ध है</string>
     <string name="permissions_title">अनुमतियां आवश्यक हैं</string>
     <string name="permissions_subtitle">नियंत्रण में रखने के लिए हमें कुछ अनुमतियों की आवश्यकता है।</string>
     <string name="permissions_notification_access">सूचना पहुंच</string>

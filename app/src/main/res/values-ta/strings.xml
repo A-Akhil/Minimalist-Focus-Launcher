@@ -257,6 +257,14 @@
     <string name="about_feedback_hint">பிழை அறிக்கைகளுக்கு:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">அல்லது எங்களுக்கு மின்னஞ்சல் அனுப்பவும்:</string>
+    <string name="about_updates_section">புதுப்பிப்புகள்</string>
+    <string name="about_check_updates">புதுப்பிப்புகளைச் சரிபார்</string>
+    <string name="about_checking_updates">சரிபார்க்கிறது…</string>
+    <string name="about_update_applied">புதுப்பிப்பு பயன்படுத்தப்பட்டது</string>
+    <string name="about_up_to_date">நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள்</string>
+    <string name="about_update_failed">புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. இணைய இணைப்பைச் சரிபார்க்கவும்.</string>
+    <string name="about_patch_version">பேட்ச் %d</string>
+    <string name="about_play_update_available">Play Store-இல் புதிய பதிப்பு கிடைக்கிறது</string>
     <string name="permissions_title">அனுமதிகள் தேவை</string>
     <string name="permissions_subtitle">கட்டுப்பாட்டில் இருக்க எங்களுக்குச் சில அனுமதிகள் தேவை.</string>
     <string name="permissions_notification_access">அறிவிப்பு அணுகல்</string>

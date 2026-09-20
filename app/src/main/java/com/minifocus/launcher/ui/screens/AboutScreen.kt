@@ -34,9 +34,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,8 +47,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.minifocus.launcher.LauncherApplication
 import com.minifocus.launcher.R
 import com.minifocus.launcher.ui.components.ScreenHeader
+import com.minifocus.launcher.update.GitHubReleaseChecker
+import com.minifocus.launcher.update.RemoteConfig
+import java.io.IOException
+import kotlinx.coroutines.launch
 
 @Composable
 fun AboutScreen(
@@ -64,6 +71,16 @@ fun AboutScreen(
         }
     }
     val versionName = packageInfo?.versionName ?: stringResource(R.string.about_version_unknown)
+
+    val remotePatchManager = remember {
+        (context.applicationContext as LauncherApplication).container.remotePatchManager
+    }
+    val patchVersion by remotePatchManager.patchVersion.collectAsState()
+    val remoteValues by remotePatchManager.values.collectAsState()
+    val remoteAppName = remember(remoteValues) { RemoteConfig.from(remoteValues).aboutAppName }
+    var updateStatus by remember { mutableStateOf<UpdateStatus?>(null) }
+    var playUpdateAvailable by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     
     Column(
         modifier = Modifier
@@ -80,7 +97,7 @@ fun AboutScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = stringResource(R.string.about_app_name),
+            text = remoteAppName ?: stringResource(R.string.about_app_name),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -101,6 +118,81 @@ fun AboutScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 16.sp
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = stringResource(R.string.about_updates_section),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(
+                if (updateStatus == UpdateStatus.CHECKING) R.string.about_checking_updates
+                else R.string.about_check_updates
+            ),
+            color = MaterialTheme.colorScheme.tertiary,
+            fontSize = 16.sp,
+            modifier = Modifier.clickable(enabled = updateStatus != UpdateStatus.CHECKING) {
+                updateStatus = UpdateStatus.CHECKING
+                coroutineScope.launch {
+                    // Small changes apply directly via the signed patch; app releases go through Play.
+                    val patch = runCatching { remotePatchManager.checkForPatch() }
+                    val release = runCatching {
+                        packageInfo?.versionName?.let { GitHubReleaseChecker.isNewerReleaseAvailable(it) } ?: false
+                    }
+                    playUpdateAvailable = release.getOrDefault(false)
+                    updateStatus = when {
+                        patch.getOrNull() == true -> UpdateStatus.APPLIED
+                        patch.exceptionOrNull() is IOException || release.exceptionOrNull() is IOException ->
+                            UpdateStatus.FAILED
+                        // A malformed patch/release response is nothing the user can fix.
+                        else -> UpdateStatus.UP_TO_DATE
+                    }
+                }
+            }
+        )
+
+        val statusText = when (updateStatus) {
+            UpdateStatus.APPLIED -> stringResource(R.string.about_update_applied)
+            UpdateStatus.UP_TO_DATE -> if (playUpdateAvailable) null else stringResource(R.string.about_up_to_date)
+            UpdateStatus.FAILED -> stringResource(R.string.about_update_failed)
+            UpdateStatus.CHECKING, null -> null
+        }
+        val patchText = if (patchVersion > 0) stringResource(R.string.about_patch_version, patchVersion) else null
+        listOfNotNull(statusText, patchText).joinToString(" · ").takeIf { it.isNotEmpty() }?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 14.sp
+            )
+        }
+
+        // Every GitHub release is also on Play, so send the user there to install it.
+        if (playUpdateAvailable) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.about_play_update_available),
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = 16.sp,
+                modifier = Modifier.clickable {
+                    try {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.minifocus.launcher"))
+                        )
+                    } catch (e: Exception) {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.minifocus.launcher"))
+                        )
+                    }
+                }
+            )
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -282,3 +374,5 @@ fun AboutScreen(
         )
     }
 }
+
+private enum class UpdateStatus { CHECKING, APPLIED, UP_TO_DATE, FAILED }

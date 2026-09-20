@@ -300,6 +300,14 @@ https://play.google.com/store/apps/details?id=com.minifocus.launcher</string>
     <string name="about_feedback_hint">Para relatórios de bugs e solicitações de recursos:</string>
     <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
     <string name="about_email_hint">Ou envie um e-mail para:</string>
+    <string name="about_updates_section">Atualizações</string>
+    <string name="about_check_updates">Verificar atualizações</string>
+    <string name="about_checking_updates">Verificando…</string>
+    <string name="about_update_applied">Atualização aplicada</string>
+    <string name="about_up_to_date">Você está atualizado</string>
+    <string name="about_update_failed">Não foi possível verificar atualizações. Verifique sua conexão com a internet.</string>
+    <string name="about_patch_version">Patch %d</string>
+    <string name="about_play_update_available">Uma nova versão está disponível na Play Store</string>
 
     
     <string name="permissions_title">Permissões necessárias</string>
