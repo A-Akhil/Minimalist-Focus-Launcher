@@ -1,6 +1,6 @@
 # Data Safety Summary
 
-**Last updated:** 4 November 2025
+**Last updated:** 25 September 2026
 
 This document summarizes how Minimalist Focus handles user data to assist with Google Play’s Data Safety questionnaire.
 
@@ -10,6 +10,7 @@ This document summarizes how Minimalist Focus handles user data to assist with G
 - **No sharing:** We do not share data with third parties.
 - **On-device processing:** All features (tasks, hidden apps, notification inbox, app locks) operate entirely on-device.
 - **No mandatory sign-in:** Users are not required to create an account.
+- **Network access:** The App only downloads a signed settings file from GitHub about every 12 hours, and asks GitHub for the latest release number when the user taps Check for updates. No user data is sent; GitHub sees the request's IP address like any web request.
 
 ## Data Collection Table
 
@@ -47,6 +48,7 @@ All local databases are stored in the App’s private sandboxed storage. Removin
 
 | Permission | Purpose | Data Flow |
 |------------|---------|-----------|
+| `INTERNET` | Download signed settings file (layout, feature switches); check latest GitHub release on request | Download only, nothing uploaded |
 | `QUERY_ALL_PACKAGES` | Display installed apps in launcher | Local only |
 | `PACKAGE_USAGE_STATS` | Enforce app locks by monitoring launches | Local only |
 | `SYSTEM_ALERT_WINDOW` | Show lock overlay on top of other apps | Local only |
@@ -57,6 +59,6 @@ All local databases are stored in the App’s private sandboxed storage. Removin
 
 - No data is collected for advertising or analytics.
 - No data is shared with third parties.
-- The App does not facilitate external data transfers.
+- The App does not facilitate external data transfers; its only network use is downloading the signed settings file and checking the latest GitHub release.
 - Users can disable optional permissions at any time; related features will stop functioning but no data will be transmitted elsewhere.
 - The App is not directed to children under 13.
