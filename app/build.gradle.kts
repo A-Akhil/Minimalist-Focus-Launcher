@@ -21,8 +21,8 @@ android {
         applicationId = "com.minifocus.launcher"
     minSdk = 29
     targetSdk = 36
-    versionCode = 21
-    versionName = "2.7.0"
+    versionCode = 22
+    versionName = "2.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -54,8 +54,8 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            // Debug builds read patches from a separate branch so tests never reach users.
-            buildConfigField("String", "PATCH_URL", "\"https://raw.githubusercontent.com/A-Akhil/Minimalist-Focus-Launcher/remote-patch-test/remote-patch/patch.json\"")
+            // Debug builds read a separate test file so tests never reach users.
+            buildConfigField("String", "PATCH_URL", "\"https://raw.githubusercontent.com/A-Akhil/Minimalist-Focus-Launcher/main/remote-patch/patch-test.json\"")
         }
     }
 

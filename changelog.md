@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Remote Patches
+- Added signed remote patches: small changes (page order, kill switches, text) can now be delivered without a Play update, checked every 12 hours and on reconnect.
+- Added "Check for updates" in About, which applies new patches immediately and shows when a newer version is available on the Play Store.
+- Added the `INTERNET` permission, used only to download the signed patch file and check the latest GitHub release; privacy policy and data safety docs updated.
+
 ## v2.7.0 (Released - Play Store) — 2026-08-31
 
 ### App Drawer Search

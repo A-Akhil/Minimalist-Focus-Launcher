@@ -1,8 +1,0 @@
-{
-  "patchVersion": 1,
-  "minVersionCode": 21,
-  "values": {
-    "home.pages": ["tasks", "home", "apps"],
-    "about.appName": "Minimalist Focus"
-  }
-}
