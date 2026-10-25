@@ -1,6 +1,9 @@
 # Changelog
 
-## [Unreleased]
+## v2.8.0 (Released - Play Store) — 2026-10-25
+
+### Localization
+- Added Danish translation (Dansk), available in Settings > Language.
 
 ### Remote Patches
 - Added signed remote patches: small changes (page order, kill switches, text) can now be delivered without a Play update, checked every 12 hours and on reconnect.
