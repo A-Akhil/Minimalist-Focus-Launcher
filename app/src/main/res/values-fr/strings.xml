@@ -298,6 +298,7 @@
     <string name="language_japanese">Japonais</string>
     <string name="language_indonesian">Indonésien</string>
     <string name="language_turkish">Turc</string>
+    <string name="language_danish">Danois</string>
     <string name="menu_pin_home">Épingler à l\'accueil</string>
     <string name="menu_unpin">Désépingler</string>
     <string name="menu_hide_app">Masquer</string>

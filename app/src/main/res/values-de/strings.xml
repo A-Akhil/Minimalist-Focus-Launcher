@@ -400,6 +400,7 @@
     <string name="language_japanese">Japanisch</string>
     <string name="language_indonesian">Indonesisch</string>
     <string name="language_turkish">Türkisch</string>
+    <string name="language_danish">Dänisch</string>
     <string name="menu_pin_home">An Startseite anheften</string>
     <string name="menu_unpin">Lösen</string>
     <string name="menu_hide_app">App ausblenden</string>

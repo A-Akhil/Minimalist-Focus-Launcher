@@ -298,6 +298,7 @@
     <string name="language_japanese">Jepang</string>
     <string name="language_indonesian">Indonesia</string>
     <string name="language_turkish">Turki</string>
+    <string name="language_danish">Denmark</string>
     <string name="menu_pin_home">Sematkan ke Beranda</string>
     <string name="menu_unpin">Lepaskan sematan</string>
     <string name="menu_hide_app">Sembunyikan Aplikasi</string>

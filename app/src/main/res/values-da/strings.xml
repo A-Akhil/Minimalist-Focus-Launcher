@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Minimalist Focus</string>
+    <string name="app_description">En minimalistisk fokus-launcher</string>
+
+    <!-- System / Accessibility -->
+    <string name="lock_accessibility_service_description">Tillad Minimalist Focus at låse skærmen, når du dobbelttrykker på startsiden.</string>
+    <string name="lock_accessibility_service_toast">Aktivér dobbelttryk-låsetjenesten i indstillinger for hjælpefunktioner.</string>
+
+    <!-- Notifications -->
+    <plurals name="notification_summary_title">
+        <item quantity="one">%d notifikation</item>
+        <item quantity="other">%d notifikationer</item>
+    </plurals>
+    <string name="notification_summary_subtitle">Tryk for at se indbakken</string>
+    <plurals name="notification_summary_subtitle_unread">
+        <item quantity="one">Tryk for at se indbakken • %d ulæst</item>
+        <item quantity="other">Tryk for at se indbakken • %d ulæste</item>
+    </plurals>
+    <string name="notification_inbox_channel_name">Launcher-indbakke</string>
+    <string name="notification_inbox_channel_description">Oversigt over opfangede notifikationer</string>
+
+    <!-- Navigation / Common -->
+    <string name="nav_home">Startside</string>
+    <string name="nav_tasks">Opgaver</string>
+    <string name="nav_all_apps">Alle apps</string>
+    <string name="nav_settings">Indstillinger</string>
+    <string name="action_cancel">Annullér</string>
+    <string name="action_save">Gem</string>
+    <string name="action_delete">Slet</string>
+    <string name="action_grant">Tillad</string>
+    <string name="action_set">Indstil</string>
+    <string name="action_yes">Ja</string>
+    <string name="action_no">Nej</string>
+    <string name="action_unlock">Lås op</string>
+    <string name="action_unhide">Vis igen</string>
+    <string name="label_none">Ingen</string>
+    <string name="label_optional">Valgfri</string>
+    <string name="label_required">Påkrævet</string>
+    <string name="label_back">Tilbage</string>
+    <string name="label_more">Mere</string>
+    <string name="label_search_apps">Søg efter apps</string>
+    <string name="label_days_format">%1$d dage</string>
+    <string name="label_unread_count">%1$d ulæste</string>
+    <string name="label_entries_count">%1$d poster</string>
+    <string name="label_apps_tracked_count">%1$d app%2$s overvåget</string>
+    <string name="label_plural_suffix">s</string>
+    <plurals name="label_day_count">
+        <item quantity="one">%1$d dag</item>
+        <item quantity="other">%1$d dage</item>
+    </plurals>
+    <plurals name="label_week_count">
+        <item quantity="one">%1$d uge</item>
+        <item quantity="other">%1$d uger</item>
+    </plurals>
+    <string name="label_all_apps">Alle apps</string>
+    <string name="label_hours_format">%1$d time</string>
+    <string name="label_hours_format_plural">%1$d timer</string>
+    <string name="label_example_hours">f.eks. 5</string>
+
+    <!-- Home Screen -->
+    <string name="home_search_apps">Søg efter apps</string>
+    <string name="home_no_apps_match">Ingen apps matcher din søgning</string>
+    <string name="home_frequently_opened">Ofte åbnet</string>
+    <string name="home_all_apps_section">Alle apps</string>
+    <string name="home_assign_app">Tildel app</string>
+    <string name="home_bottom_quick_launch">Hurtigstart i bunden</string>
+    <string name="home_left_icon">Venstre ikon</string>
+    <string name="home_right_icon">Højre ikon</string>
+    <string name="home_default_left_label">Telefon</string>
+    <string name="home_default_right_label">Kamera</string>
+    <string name="home_daily_tasks_visible">Daglige opgaver vises</string>
+    <string name="home_daily_tasks_hidden">Daglige opgaver skjules</string>
+    <string name="home_bottom_summary_format">bund: %1$s / %2$s</string>
+    <string name="home_summary_format">%1$s · %2$s</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Indstillinger</string>
+    <string name="settings_home_screen">Startskærm</string>
+    <string name="settings_clock">Ur</string>
+    <string name="settings_notification_bar">Notifikationslinje</string>
+    <string name="settings_app_drawer">Appskuffe</string>
+    <string name="settings_app_reminders">App-påmindelser</string>
+    <string name="settings_appearance">Udseende</string>
+    <string name="settings_device_settings">Enhedsindstillinger</string>
+    <string name="settings_device_settings_summary">Åbn Android-indstillinger</string>
+    <string name="settings_permissions">Tilladelser</string>
+    <string name="settings_backup_restore">Sikkerhedskopi &amp; gendannelse</string>
+    <string name="settings_backup_restore_subtitle">Administrér sikkerhedskopier af indstillinger</string>
+    <string name="settings_about">Om</string>
+    <string name="settings_about_subtitle">Udviklerinfo og feedback</string>
+    <string name="settings_no_apps_tracked">Ingen apps overvåget</string>
+    <string name="settings_keyboard_opens_with_swipe">Tastaturet åbner ved swipe</string>
+    <string name="settings_keyboard_opens_manually">Tastaturet åbner manuelt</string>
+    <string name="settings_smart_suggestions_on">smarte forslag slået til</string>
+    <string name="settings_smart_suggestions_off">smarte forslag slået fra</string>
+    <string name="settings_theme_summary_format">%1$s tema · %2$s tekst</string>
+
+    <!-- Home Screen Settings -->
+    <string name="home_settings_title">Startskærm</string>
+    <string name="home_settings_daily_tasks_module">Modul for daglige opgaver</string>
+    <string name="home_settings_show_daily_tasks">Vis daglige opgaver på startsiden</string>
+    <string name="home_settings_daily_tasks_hint">Aktive daglige påmindelser vises under uret.</string>
+    <string name="home_settings_daily_tasks_all_complete">Alle opgaver er udført lige nu, så sektionen er skjult til i morgen eller til der er ny aktivitet.</string>
+    <string name="home_settings_daily_tasks_complete_to_hide">Udfør det hele for at skjule den for i dag.</string>
+    <string name="home_settings_daily_tasks_auto_hide">Daglige opgaver forbliver synlige i 10 sekunder efter udførelse og skjules derefter automatisk.</string>
+    <string name="home_settings_gestures">Bevægelser</string>
+    <string name="home_settings_double_tap_lock">Dobbelttryk for at låse skærmen</string>
+    <string name="home_settings_lock_service_disabled">Aktivér låsetjenesten i indstillinger for hjælpefunktioner</string>
+    <string name="home_settings_lock_service_enabled">Dobbelttryk på tomt område på startsiden for at låse enheden</string>
+    <string name="home_settings_smart_suggestions">Smarte forslag</string>
+    <string name="home_settings_show_adaptive_row">Vis adaptiv række</string>
+    <string name="home_settings_reset_learning">Nulstil indlærte data</string>
+
+    <!-- Clock Settings -->
+    <string name="clock_settings_title">Ur</string>
+    <string name="clock_settings_time_format">Tidsformat</string>
+    <string name="clock_settings_seconds">Sekunder</string>
+    <string name="clock_settings_show_seconds">Vis sekunder</string>
+    <string name="clock_settings_seconds_hint">Tilføj en sekundviser til uret på startskærmen.</string>
+    <string name="clock_settings_custom_duration">Brugerdefineret varighed (timer)</string>
+    <string name="clock_format_24">24-timers</string>
+    <string name="clock_format_12">12-timers</string>
+    <string name="clock_seconds_on"> · sekunder til</string>
+    <string name="clock_seconds_off"> · sekunder fra</string>
+
+    <!-- App Drawer Settings -->
+    <string name="drawer_settings_keyboard">Tastatur</string>
+    <string name="drawer_settings_open_keyboard_on_swipe">Åbn tastatur ved swipe</string>
+    <string name="drawer_settings_keyboard_hint">Vis automatisk søgefeltet og tastaturet, når du åbner Alle apps.</string>
+    <string name="drawer_settings_hidden_apps">Skjulte apps</string>
+    <string name="drawer_settings_hidden_apps_unlocked">Skjulte apps er låst op</string>
+    <string name="drawer_settings_hidden_apps_gate">Denne spærring holder skjulte apps ude af skuffen. Når den er låst op, kan du vise bestemte apps igen nedenfor.</string>
+    <string name="drawer_settings_hidden_apps_reveal">Tryk og hold i 10 sekunder for at se dine skjulte apps.</string>
+    <string name="drawer_settings_hidden_apps_manage">Tryk og hold i 10 sekunder for at se og administrere dem.</string>
+    <string name="drawer_settings_hidden_apps_tap_unhide">Tryk på Vis igen for at lægge en app tilbage i skuffen.</string>
+    <string name="drawer_settings_no_hidden_apps">Du har ikke skjult nogen apps endnu.</string>
+    <string name="drawer_settings_hidden_count">%d skjult</string>
+    <string name="drawer_settings_no_apps_hidden">Ingen apps skjult</string>
+    <string name="drawer_settings_releasing_resets">Hvis du slipper for tidligt, nulstilles timeren med det samme.</string>
+    <string name="drawer_settings_unlocking">Låser op…</string>
+    <string name="drawer_settings_unlocked">Låst op</string>
+    <string name="drawer_settings_keep_holding">Bliv ved med at holde</string>
+    <string name="drawer_settings_hold">Hold</string>
+
+    <!-- Notification Settings -->
+    <string name="notif_settings_title">Notifikationsindstillinger</string>
+    <string name="notif_settings_inbox_section">Notifikationsindbakke</string>
+    <string name="notif_settings_capture">Opfang notifikationer</string>
+    <string name="notif_settings_capture_hint">Gem notifikationer i indbakken i appen og send én samlet oversigt.</string>
+    <string name="notif_settings_auto_clear">Ryd notifikationer automatisk</string>
+    <string name="notif_settings_log_retention">Opbevaring af logs</string>
+    <string name="notif_settings_notif_retention">Opbevaring af notifikationer</string>
+    <string name="notif_settings_app_filters">App-filtre</string>
+    <string name="notif_settings_view_logs">Se logs</string>
+    <string name="notif_settings_inbox_off_hint">Slå indbakken til for at administrere opbevaring og filtre.</string>
+
+    <!-- Notification Inbox -->
+    <string name="notif_inbox_title">Notifikationsindbakke</string>
+    <string name="notif_inbox_mark_all_read">Markér alle som læst</string>
+    <string name="notif_inbox_empty">Ingen notifikationer endnu</string>
+    <string name="notif_inbox_empty_hint">Notifikationer, du opfanger, vises her.</string>
+
+    <!-- Notification Filter -->
+    <string name="notif_filter_title">Filtre</string>
+    <string name="notif_filter_subtitle">Administrér notifikationspræferencer</string>
+    <string name="notif_filter_enable_all">Aktivér alle</string>
+    <string name="notif_filter_disable_all">Deaktivér alle</string>
+    <string name="notif_filter_no_matching_apps">Ingen matchende apps</string>
+
+    <!-- Log Viewer -->
+    <string name="log_viewer_title">Notifikationslogs</string>
+    <string name="log_viewer_empty">Ingen notifikationer endnu</string>
+    <string name="log_viewer_empty_hint">Notifikationer, du opfanger, vises her.</string>
+
+    <!-- App Reminders Settings -->
+    <string name="app_reminders_title">App-påmindelser</string>
+    <string name="app_reminders_hint">Aktiverede apps spørger, hvor længe du vil bruge dem, før de startes. Du kan også slå det til eller fra i en apps menu ved langt tryk.</string>
+    <string name="app_reminders_no_matching">Ingen matchende apps</string>
+    <string name="summary_inbox_on_format">Indbakke til · rydder %1$s · logs %2$s</string>
+    <string name="summary_inbox_disabled">Indbakke deaktiveret</string>
+
+    <!-- Time Intention Dialog -->
+    <string name="time_intention_today">I DAG</string>
+    <string name="time_intention_past_7_days">SIDSTE 7 DAGE</string>
+    <string name="time_intention_on_expire">VED UDLØB</string>
+    <string name="time_intention_lock">Lås</string>
+    <string name="time_intention_lock_app">Lås %s</string>
+    <string name="time_intention_reminder">Påmindelse</string>
+    <string name="time_intention_custom_minutes">Brugerdefinerede minutter...</string>
+
+    <!-- Task Dialogs -->
+    <string name="task_add_title">Tilføj ny opgave</string>
+    <string name="task_prompt_what_to_do">Hvad skal gøres?</string>
+    <string name="task_edit_daily_title">Redigér daglig opgave</string>
+    <string name="task_edit_title">Redigér opgave</string>
+    <string name="task_name_label">Opgavenavn</string>
+    <string name="task_completed_tasks">Udførte opgaver</string>
+    <string name="task_no_completed">Ingen udførte opgaver endnu</string>
+    <string name="task_add_icon">Tilføj opgave</string>
+    <string name="task_history_icon">Historik</string>
+    <string name="task_completed_icon">Udført</string>
+    <string name="task_enabled">Opgave aktiveret</string>
+    <string name="task_repeat_daily">Gentag hver dag</string>
+    <string name="task_repeat_pattern">Gentagelsesmønster</string>
+    <string name="task_repeat_every_2_days">Gentages hver 2. dag</string>
+    <string name="task_daily_label">Dagligt</string>
+    <string name="task_alternate_label">Hver anden dag</string>
+    <string name="task_days_label">Dage</string>
+    <string name="task_set_reminder">Indstil påmindelse</string>
+    <string name="task_limit_date_range">Begræns til datointerval</string>
+    <string name="task_select_start_date">Vælg startdato</string>
+    <string name="task_select_end_date_optional">Vælg slutdato (valgfri)</string>
+    <string name="task_select_date_time">Vælg dato &amp; tid</string>
+    <string name="task_reminder_label">Påmindelse</string>
+    <string name="task_set_label">Indstil</string>
+    <string name="task_next_label">Næste</string>
+    <string name="task_confirm_label">Bekræft</string>
+    <string name="task_enabled_will_show_scheduled">Vises på planlagte dage</string>
+    <string name="task_enabled_hidden_until_reenabled">Skjult, indtil den aktiveres igen</string>
+    <string name="task_limit_window_hint">Kun synlig inden for intervallet</string>
+    <string name="task_limit_indefinite_hint">Gentages uendeligt</string>
+    <string name="task_start_label">Start</string>
+    <string name="task_clear_end_date">Ryd slutdato</string>
+    <string name="task_completed_at">Udført: %s</string>
+    <string name="task_status_paused">Sat på pause</string>
+    <string name="task_status_completed_today">Udført i dag</string>
+    <string name="task_status_active_ends">Aktiv • slutter %s</string>
+    <string name="task_status_active_since">Aktiv • siden %s</string>
+    <string name="task_status_active_every_day">Aktiv hver dag</string>
+    <string name="task_status_starts">Starter %s</string>
+    <string name="task_status_ended">Sluttede %s</string>
+    <string name="task_status_inactive_ended">Inaktiv • sluttede %s</string>
+    <string name="task_status_inactive_today">Inaktiv i dag</string>
+    <string name="task_today_at">I dag kl. %s</string>
+    <string name="task_tomorrow_at">I morgen kl. %s</string>
+    <string name="task_overdue_at">Forfaldt kl. %s</string>
+    <string name="task_choose_days">Vælg dage</string>
+    <string name="task_repeats_every_two_days">Gentages hver 2. dag</string>
+    <string name="task_completed_format">Udført: %s</string>
+    <string name="weekday_mon">Man</string>
+    <string name="weekday_tue">Tir</string>
+    <string name="weekday_wed">Ons</string>
+    <string name="weekday_thu">Tor</string>
+    <string name="weekday_fri">Fre</string>
+    <string name="weekday_sat">Lør</string>
+    <string name="weekday_sun">Søn</string>
+
+    <!-- Emergency Unlock -->
+    <string name="emergency_unlock_title">Nødoplåsning</string>
+    <string name="emergency_unlock_no_locked_apps">Ingen låste apps</string>
+    <string name="emergency_unlock_unlocking">Låser op</string>
+    <string name="emergency_unlock_confirm_stop">Vil du virkelig stoppe?</string>
+    <string name="emergency_unlock_confirm_message">Dette låser %s op</string>
+    <string name="emergency_unlock_until">Indtil %s</string>
+    <string name="emergency_unlock_action">Lås op</string>
+
+    <!-- Appearance Settings -->
+    <string name="appearance_title">Udseende</string>
+    <string name="appearance_text_section">Tekst</string>
+    <string name="appearance_text_size">Tekststørrelse</string>
+    <string name="appearance_theme_section">Tema</string>
+    <string name="appearance_theme_dark">Mørkt</string>
+    <string name="appearance_theme_light">Lyst</string>
+
+    <!-- Text Size Settings -->
+    <string name="text_size_title">Tekststørrelse</string>
+    <string name="text_size_preview">Forhåndsvisning</string>
+    <string name="text_size_preview_time">12:30</string>
+    <string name="text_size_preview_app">Kalender</string>
+    <string name="text_size_preview_task">Gennemgå projektmål og opdatér køreplanen.</string>
+
+    <!-- Backup Settings -->
+    <string name="backup_title">Sikkerhedskopi &amp; gendannelse</string>
+    <string name="backup_action_title">Sikkerhedskopiér indstillinger</string>
+    <string name="backup_action_subtitle">Gem din nuværende konfiguration</string>
+    <string name="restore_action_title">Gendan indstillinger</string>
+    <string name="restore_action_subtitle">Indlæs konfiguration fra en sikkerhedskopi</string>
+
+    <!-- About Screen -->
+    <string name="about_title">Om</string>
+    <string name="about_app_name">Mini Launcher</string>
+    <string name="about_version">Version %s</string>
+    <string name="about_version_unknown">Ukendt</string>
+    <string name="about_support_section">Støt appen</string>
+    <string name="about_rate_play_store">Bedøm på Play Butik</string>
+    <string name="about_share_app">Del app</string>
+    <string name="about_share_via">Del via</string>
+    <string name="about_share_subject">Mini Launcher</string>
+    <string name="about_share_message">Se Mini Launcher - en minimalistisk fokus-launcher
+
+https://play.google.com/store/apps/details?id=com.minifocus.launcher</string>
+    <string name="about_developer_section">Udvikler</string>
+    <string name="about_developer_name">A Akhil</string>
+    <string name="about_contact_section">Kontakt</string>
+    <string name="about_contact_email">akhil@devakhil.com</string>
+    <string name="about_contact_website">devakhil.com</string>
+    <string name="about_feedback_section">Feedback &amp; problemer</string>
+    <string name="about_feedback_hint">Til fejlrapporter og ønsker om funktioner:</string>
+    <string name="about_feedback_repo">github.com/A-Akhil/Minimalist-Focus-Launcher</string>
+    <string name="about_email_hint">Eller send en e-mail til:</string>
+    <string name="about_updates_section">Opdateringer</string>
+    <string name="about_check_updates">Søg efter opdateringer</string>
+    <string name="about_checking_updates">Søger…</string>
+    <string name="about_update_applied">Opdatering installeret</string>
+    <string name="about_up_to_date">Du er opdateret</string>
+    <string name="about_update_failed">Kunne ikke søge efter opdateringer. Tjek din internetforbindelse.</string>
+    <string name="about_patch_version">Patch %d</string>
+    <string name="about_play_update_available">En ny version er tilgængelig på Play Butik</string>
+
+    <!-- Permissions Screen -->
+    <string name="permissions_title">Tilladelser påkrævet</string>
+    <string name="permissions_subtitle">Vi har brug for nogle få tilladelser for at holde alt minimalt og under din kontrol.</string>
+    <string name="permissions_notification_access">Adgang til notifikationer</string>
+    <string name="permissions_exact_alarms">Præcise alarmer &amp; påmindelser</string>
+    <string name="permissions_lock_screen">Genvej til låseskærm</string>
+    <string name="permissions_display_over_apps">Vis oven på andre apps</string>
+    <string name="permissions_usage_stats">Adgang til brugsstatistik</string>
+    <string name="permissions_post_notifications">Send notifikationer</string>
+    <string name="permissions_accessibility_title">Tilladelse til hjælpefunktioner påkrævet</string>
+    <string name="permissions_accessibility_rationale">Mini Launcher bruger tilgængelighedstjenesten udelukkende til at låse din skærm, når du dobbelttrykker. Der indsamles ingen data. Hvis du afviser, deaktiveres denne funktion.</string>
+    <string name="permissions_open_app_info">Åbn appinfo</string>
+    <string name="permissions_restricted_build">Denne build er begrænset af Android. Åbn appinfo → tre prikker → Tillad begrænsede indstillinger, før du aktiverer adgang til notifikationer.</string>
+    <string name="permissions_all_granted">Alle tilladelser givet</string>
+    <string name="permissions_notifications_required">Notifikationer påkrævet</string>
+    <string name="permissions_missing">Mangler %s</string>
+    <string name="permissions_notification_access_label">Adgang til notifikationer</string>
+    <string name="permissions_exact_alarms_label">Præcise alarmer</string>
+    <string name="permissions_lock_service_label">Låsetjeneste</string>
+    <string name="permissions_usage_access_label">Brugsadgang</string>
+    <string name="permissions_overlay_label">Overlay</string>
+
+    <!-- Language Settings -->
+    <string name="language_settings_title">Sprog</string>
+    <string name="language_system_default">Systemstandard</string>
+    <string name="language_english">English</string>
+    <string name="language_german">Deutsch (German)</string>
+    <string name="language_spanish">Español (Spanish)</string>
+    <string name="language_portuguese">Português (Portuguese)</string>
+    <string name="language_french">Français (French)</string>
+    <string name="language_russian">Русский (Russian)</string>
+    <string name="language_hindi">हिन्दी (Hindi)</string>
+    <string name="language_tamil">தமிழ் (Tamil)</string>
+    <string name="language_japanese">日本語 (Japanese)</string>
+    <string name="language_indonesian">Bahasa Indonesia (Indonesian)</string>
+    <string name="language_turkish">Türkçe (Turkish)</string>
+    <string name="language_danish">Dansk</string>
+
+    <!-- App context menu -->
+    <string name="menu_pin_home">Fastgør til startsiden</string>
+    <string name="menu_unpin">Frigør</string>
+    <string name="menu_hide_app">Skjul app</string>
+    <string name="menu_unhide">Vis igen</string>
+    <string name="menu_lock_app">Lås app</string>
+    <string name="menu_add_time_reminder">Tilføj tidspåmindelse</string>
+    <string name="menu_remove_time_reminder">Fjern tidspåmindelse</string>
+    <string name="menu_app_info">Appinfo</string>
+    <string name="menu_uninstall">Afinstallér</string>
+
+    <!-- Permission screen extra copy -->
+    <string name="permissions_go_to_settings">Gå til indstillinger</string>
+    <string name="permissions_not_now">Ikke nu</string>
+    <string name="permissions_post_notifications_desc">Lad påmindelser og vigtige beskeder nå frem til dig.</string>
+    <string name="permissions_exact_alarms_desc">Lad påmindelser ringe præcis til tiden, selv i strømsparetilstand.</string>
+    <string name="permissions_notification_access_desc">Aktivér den valgfri indbakke, der samler notifikationer.</string>
+    <string name="permissions_lock_screen_desc">Aktivér tilgængelighedstjenesten, der driver dobbelttryk-lås uden at deaktivere biometri.</string>
+    <string name="permissions_usage_stats_desc">Registrerer startede apps, så valgfri applåse overholdes.</string>
+    <string name="permissions_display_over_apps_desc">Viser låse-overlayet, når du forsøger at åbne låste apps.</string>
+    <string name="permissions_required_to_continue">Giv de påkrævede tilladelser for at fortsætte.</string>
+    <string name="permissions_optional_unlock_features">Valgfri tilladelser aktiverer notifikationsindbakken og avancerede låse.</string>
+    <string name="permissions_all_granted_sentence">Alle tilladelser givet.</string>
+
+    <!-- Locale + app reminder screen helpers -->
+    <string name="language_settings_subtitle">Appens visningssprog</string>
+    <!-- Added: extracted hardcoded UI strings -->
+    <string name="time_intention_time_ended">Din tid er gået</string>
+    <string name="time_intention_how_long">Hvor længe vil du bruge den?</string>
+    <string name="time_intention_extend_by">FORLÆNG MED</string>
+    <string name="time_intention_duration">VARIGHED</string>
+    <string name="action_start">Start</string>
+    <string name="action_go_back">Gå tilbage</string>
+    <string name="action_ok">OK</string>
+    <string name="time_intention_notify">Giv besked</string>
+    <string name="time_intention_ask_me">Spørg mig</string>
+    <string name="time_intention_go_home">Gå til startsiden</string>
+    <string name="label_minutes_format">%1$d min.</string>
+
+    <!-- App Lock / Notification channel strings -->
+    <string name="app_lock_channel_name">Overvågning af applås</string>
+    <string name="app_lock_channel_description">Overvåger låste apps i baggrunden</string>
+    <string name="app_lock_active">Applås aktiv</string>
+    <string name="app_lock_monitoring">Overvåger låste apps</string>
+    <string name="app_lock_locked">Låst</string>
+    <string name="app_lock_unlocks_at">Låses op kl. %1$s</string>
+    <string name="app_lock_focus_message">Du valgte at fokusere
+Respektér din beslutning</string>
+    <string name="duration_hms_format">%1$dt %2$02dm %3$02ds</string>
+    <string name="duration_ms_format">%1$dm %2$02ds</string>
+    <string name="duration_s_format">%1$ds</string>
+
+    <!-- Time reminder strings -->
+    <string name="time_reminder_channel_name">Apptidspåmindelser</string>
+    <string name="time_reminder_channel_description">Påmindelser, når din tiltænkte brugstid for en app udløber</string>
+    <string name="time_reminder_title">Tiden er gået</string>
+    <string name="time_reminder_text_format">Din tiltænkte tid til %1$s er udløbet</string>
+
+    <string name="action_continue">Fortsæt</string>
+    <string name="action_go_back_home">Gå tilbage til startsiden</string>
+    <string name="seconds_remaining_format">%1$d sekunder tilbage</string>
+
+    <!-- Calendar Sync -->
+    <string name="title_calendar">Kalender</string>
+    <string name="title_calendar_accounts">Konti</string>
+    <string name="desc_calendar_accounts">Vælg hvilken kalender der bruges til at oprette begivenheder</string>
+    <string name="title_calendar_sync">Synkronisering</string>
+    <string name="desc_calendar_sync">Konfigurér, hvordan opgaver og påmindelser synkroniseres med din kalender</string>
+    <string name="title_default_calendar">Standardkalender</string>
+    <string name="desc_default_calendar">Begivenheder, du opretter fra launcheren, tilføjes til denne kalender.</string>
+    <string name="msg_calendar_permission_not_granted">Kalendertilladelse er ikke givet. Åbn kalendersiden for at give tilladelse først.</string>
+    <string name="msg_no_writable_calendars">Ingen redigerbare kalendere fundet på denne enhed.</string>
+    <string name="title_auto_detect">Registrér automatisk</string>
+    <string name="desc_auto_detect">Lad launcheren vælge den bedste kalender</string>
+    <string name="title_sync_settings">Synkroniseringsindstillinger</string>
+    <string name="title_show_tasks_in_calendar">Vis opgaver i kalenderen</string>
+    <string name="desc_show_tasks_in_calendar">Se dine opgaver direkte i launcherens kalendervisning</string>
+    <string name="title_add_tasks_to_device_calendar">Føj opgaver til enhedens kalender</string>
+    <string name="desc_add_tasks_to_device_calendar">Synkronisér dine opgaver, så de vises i Google Kalender og på tværs af dine enheder</string>
+    <string name="title_sync_one_time_tasks">Synkronisér engangsopgaver</string>
+    <string name="desc_sync_one_time_tasks">Omfatter opgaver med en bestemt dato</string>
+    <string name="title_sync_repeating_tasks">Synkronisér tilbagevendende opgaver</string>
+    <string name="desc_sync_repeating_tasks">Omfatter opgaver, der gentages dagligt eller på bestemte dage</string>
+    <string name="title_permission_required">Tilladelse påkrævet</string>
+    <string name="title_grant_permission">Giv tilladelse</string>
+    <string name="desc_grant_permission">Vi har brug for adgang til kalenderen for at vise dine begivenheder sammen med dine opgaver.</string>
+    <string name="action_add_event">Tilføj begivenhed</string>
+    <string name="label_all_day">Hele dagen</string>
+    <string name="action_delete_event">Slet begivenhed</string>
+    <string name="label_duration">Varighed:</string>
+    <string name="label_event_title">Begivenhedens titel</string>
+    <string name="title_new_event">Ny begivenhed</string>
+    <string name="msg_no_events">Ingen begivenheder</string>
+    <string name="label_no_title">(Ingen titel)</string>
+    <string name="msg_remove_event_prompt">Fjern "%1$s" fra din kalender?</string>
+    <string name="label_time">Tid:</string>
+    <string name="label_today">I dag</string>
+    <string name="label_tomorrow">I morgen</string>
+    <string name="label_yesterday">I går</string>
+    <string name="label_next_month">Næste måned</string>
+    <string name="label_previous_month">Forrige måned</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_subtitle">En minimalistisk launcher\ntil et fokuseret liv</string>
+    <string name="onboarding_tap_to_begin">Tryk hvor som helst for at begynde</string>
+    <string name="onboarding_skip">Spring over</string>
+    <string name="onboarding_swipe_to_tasks">Swipe for at se dine opgaver</string>
+    <string name="onboarding_swipe_to_calendar">Swipe for at se din kalender</string>
+    <string name="onboarding_swipe_back_home">Swipe tilbage til startsiden</string>
+    <string name="onboarding_swipe_to_drawer">Swipe for at åbne apps</string>
+    <string name="onboarding_long_press_to_pin">Tryk længe på en app for at fastgøre den</string>
+    <string name="onboarding_tap_pin">Tryk på \'Fastgør til startsiden\'</string>
+    <string name="onboarding_complete_title">Du er klar</string>
+    <string name="onboarding_complete_subtitle">Lad os nu konfigurere nogle få tilladelser</string>
+    <string name="onboarding_continue">Fortsæt</string>
+    <string name="onboarding_replay">Afspil introduktion igen</string>
+</resources>

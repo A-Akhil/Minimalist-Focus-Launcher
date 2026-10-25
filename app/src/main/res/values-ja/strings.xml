@@ -298,6 +298,7 @@
     <string name="language_japanese">日本語</string>
     <string name="language_indonesian">インドネシア語</string>
     <string name="language_turkish">トルコ語</string>
+    <string name="language_danish">デンマーク語</string>
     <string name="menu_pin_home">ホームにピン留め</string>
     <string name="menu_unpin">ピン留め解除</string>
     <string name="menu_hide_app">アプリを隠す</string>

@@ -306,6 +306,7 @@
     <string name="language_japanese">Японский</string>
     <string name="language_indonesian">Индонезийский</string>
     <string name="language_turkish">Турецкий</string>
+    <string name="language_danish">Датский</string>
     <string name="menu_pin_home">Закрепить</string>
     <string name="menu_unpin">Открепить</string>
     <string name="menu_hide_app">Скрыть приложение</string>

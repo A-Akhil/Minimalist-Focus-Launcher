@@ -298,6 +298,7 @@
     <string name="language_japanese">जापानी</string>
     <string name="language_indonesian">इंडोनेशियाई</string>
     <string name="language_turkish">तुर्की</string>
+    <string name="language_danish">डेनिश</string>
     <string name="menu_pin_home">होम पर पिन करें</string>
     <string name="menu_unpin">अनपिन करें</string>
     <string name="menu_hide_app">ऐप छिपाएं</string>

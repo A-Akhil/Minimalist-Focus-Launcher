@@ -298,6 +298,7 @@
     <string name="language_japanese">Japonca</string>
     <string name="language_indonesian">Endonezce</string>
     <string name="language_turkish">Türkçe</string>
+    <string name="language_danish">Danca</string>
     <string name="menu_pin_home">Ana Ekrana Sabitle</string>
     <string name="menu_unpin">Sabitlemeyi Kaldır</string>
     <string name="menu_hide_app">Uygulamayı Gizle</string>

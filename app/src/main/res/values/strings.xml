@@ -345,6 +345,7 @@ https://play.google.com/store/apps/details?id=com.minifocus.launcher</string>
     <string name="language_japanese">日本語 (Japanese)</string>
     <string name="language_indonesian">Bahasa Indonesia (Indonesian)</string>
     <string name="language_turkish">Türkçe (Turkish)</string>
+    <string name="language_danish">Dansk (Danish)</string>
 
     <!-- App context menu -->
     <string name="menu_pin_home">Pin to Home</string>
